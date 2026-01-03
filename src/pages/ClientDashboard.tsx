@@ -165,7 +165,8 @@ const ClientDashboard = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductPreviewOpen, setIsProductPreviewOpen] = useState(false);
   const [showMapView, setShowMapView] = useState(false); // State to toggle between list and map view
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null); // User's current location
+  // Initialize userLocation with a default value
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number }>({ lat: 28.7041, lng: 77.1025 }); // Default to New Delhi
 
   // Filter states
   const [categoryFilter, setCategoryFilter] = useState<string>("All");
@@ -185,15 +186,13 @@ const ClientDashboard = () => {
         },
         (error) => {
           console.error("Error getting user location:", error);
-          toast.error("Could not retrieve your location. Showing all vendors.");
-          // Default to a central location if geolocation fails
-          setUserLocation({ lat: 28.7041, lng: 77.1025 }); 
+          toast.error("Could not retrieve your location. Showing all vendors at a default location.");
+          // userLocation already has a default, so no need to set it again here.
         }
       );
     } else {
-      toast.info("Geolocation is not supported by your browser. Showing all vendors.");
-      // Default to a central location if geolocation is not supported
-      setUserLocation({ lat: 28.7041, lng: 77.1025 });
+      toast.info("Geolocation is not supported by your browser. Showing all vendors at a default location.");
+      // userLocation already has a default.
     }
   }, []);
 
@@ -339,13 +338,7 @@ const ClientDashboard = () => {
         </div>
 
         {showMapView ? (
-          userLocation ? (
-            <VendorMap products={filteredProducts} userLocation={userLocation} />
-          ) : (
-            <div className="text-center text-gray-600 dark:text-gray-400 text-lg">
-              Loading map and your location...
-            </div>
-          )
+          <VendorMap products={filteredProducts} userLocation={userLocation} />
         ) : (
           <ClientProductListings 
             products={filteredProducts} 
