@@ -26,12 +26,12 @@ const Index = () => {
             Are you a buyer or a vendor?
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-6">
-            <Link to="/client-login">
+            <Link to="/auth"> {/* Link to the new AuthPage */}
               <Button className="w-full sm:w-auto px-10 py-4 text-lg bg-green-600 hover:bg-green-700 text-white shadow-lg transform transition-transform hover:scale-105">
                 I'm a Client
               </Button>
             </Link>
-            <Link to="/vendor-login">
+            <Link to="/auth"> {/* Link to the new AuthPage */}
               <Button variant="outline" className="w-full sm:w-auto px-10 py-4 text-lg border-green-600 text-green-600 hover:bg-green-50 dark:border-green-400 dark:text-green-400 dark:hover:bg-gray-700 shadow-lg transform transition-transform hover:scale-105">
                 I'm a Vendor
               </Button>
