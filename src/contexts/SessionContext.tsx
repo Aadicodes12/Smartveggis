@@ -3,7 +3,7 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { useNavigate } = "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from 'sonner';
 
 interface SessionContextType {
