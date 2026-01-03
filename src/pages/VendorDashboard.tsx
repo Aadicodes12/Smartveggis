@@ -3,63 +3,63 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import VendorProducts from "@/components/VendorProducts";
+import VendorProducts from "@/components/VendorProducts"; // Import the new component
 
 const dummyProducts = [
   {
     id: "1",
     name: "Organic Apples",
     description: "Freshly picked organic apples, sweet and crisp. Perfect for snacking or baking.",
-    price: 120.00,
+    price: 2.99,
     imageUrl: "/apple.jpg",
   },
   {
     id: "2",
     name: "Heirloom Tomatoes",
     description: "Vibrant and flavorful heirloom tomatoes, ideal for salads and gourmet dishes.",
-    price: 90.00,
+    price: 4.50,
     imageUrl: "/tomato.jpg",
   },
   {
     id: "3",
     name: "Fresh Spinach",
     description: "Nutrient-rich fresh spinach, great for smoothies, salads, or sautéing.",
-    price: 60.00,
+    price: 1.75,
     imageUrl: "/spinach.jpg",
   },
   {
     id: "4",
     name: "Sweet Potatoes",
     description: "Naturally sweet and versatile sweet potatoes, perfect for roasting or mashing.",
-    price: 90.00,
+    price: 2.20,
     imageUrl: "/potato.jpg",
   },
   {
     id: "5",
     name: "Organic Bananas",
     description: "Ripe organic bananas, a healthy and convenient snack.",
-    price: 70.00,
-    imageUrl: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwYmFuYW5hc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&lib=rb-4.0.3&q=80&w=1080",
+    price: 0.79,
+    imageUrl: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwYmFuYW5hc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
   },
   {
-    id: "9",
-    name: "Fresh Oranges",
-    description: "Juicy and sweet oranges, perfect for a healthy snack or fresh juice.",
-    price: 100.00,
-    imageUrl: "/oranges.jpg",
+    id: "6",
+    name: "Bell Peppers (Mixed)",
+    description: "A colorful mix of red, yellow, and green bell peppers, great for stir-fries and salads.",
+    price: 3.50,
+    imageUrl: "https://images.unsplash.com/photo-1518635013023-f047779701a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxiZWxsJTIwcGVwcGVyc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
   },
   {
-    id: "10",
+    id: "7",
     name: "Bitter Gourd (Karela)",
     description: "Fresh bitter gourd, known for its health benefits and unique taste.",
-    price: 70.00,
+    price: 2.50,
     imageUrl: "/karela.jpg",
   },
   {
-    id: "11",
+    id: "8",
     name: "Garlic",
     description: "Pungent and flavorful garlic, essential for many cuisines.",
-    price: 120.00,
+    price: 1.99,
     imageUrl: "/garlic.jpg",
   },
 ];

@@ -9,11 +9,6 @@ import ClientLoginPage from "./pages/ClientLoginPage";
 import VendorLoginPage from "./pages/VendorLoginPage";
 import ClientDashboard from "./pages/ClientDashboard";
 import VendorDashboard from "./pages/VendorDashboard";
-import ClientOrdersPage from "./pages/ClientOrdersPage";
-import ClientFavoriteVendorsPage from "./pages/ClientFavoriteVendorsPage";
-import AuthPage from "./pages/AuthPage";
-import SessionContextProvider from "./contexts/SessionContext";
-import LanguageContextProvider from "./contexts/LanguageContext";
 
 const queryClient = new QueryClient();
 
@@ -23,22 +18,15 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <LanguageContextProvider>
-          <SessionContextProvider>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/client-login" element={<ClientLoginPage />} />
-              <Route path="/vendor-login" element={<VendorLoginPage />} />
-              <Route path="/client-dashboard" element={<ClientDashboard />} />
-              <Route path="/vendor-dashboard" element={<VendorDashboard />} />
-              <Route path="/client-orders" element={<ClientOrdersPage />} />
-              <Route path="/client-favorite-vendors" element={<ClientFavoriteVendorsPage />} />
-              <Route path="/auth" element={<AuthPage />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </SessionContextProvider>
-        </LanguageContextProvider>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/client-login" element={<ClientLoginPage />} />
+          <Route path="/vendor-login" element={<VendorLoginPage />} />
+          <Route path="/client-dashboard" element={<ClientDashboard />} />
+          <Route path="/vendor-dashboard" element={<VendorDashboard />} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
