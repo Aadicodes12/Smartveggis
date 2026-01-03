@@ -4,75 +4,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import VendorProducts from "@/components/VendorProducts";
-
-const dummyProducts = [
-  {
-    id: "1",
-    name: "Organic Apples",
-    description: "Freshly picked organic apples, sweet and crisp. Perfect for snacking or baking.",
-    price: 120.00,
-    imageUrl: "/apple.jpg",
-    quantityUnit: "per kg",
-  },
-  {
-    id: "2",
-    name: "Heirloom Tomatoes",
-    description: "Vibrant and flavorful heirloom tomatoes, ideal for salads and gourmet dishes.",
-    price: 90.00,
-    imageUrl: "/tomato.jpg",
-    quantityUnit: "per kg",
-  },
-  {
-    id: "3",
-    name: "Fresh Spinach",
-    description: "Nutrient-rich fresh spinach, great for smoothies, salads, or sautéing.",
-    price: 60.00,
-    imageUrl: "/spinach.jpg",
-    quantityUnit: "per bunch",
-  },
-  {
-    id: "4",
-    name: "Sweet Potatoes",
-    description: "Naturally sweet and versatile sweet potatoes, perfect for roasting or mashing.",
-    price: 90.00,
-    imageUrl: "/potato.jpg",
-    quantityUnit: "per kg",
-  },
-  {
-    id: "5",
-    name: "Organic Bananas",
-    description: "Ripe organic bananas, a healthy and convenient snack.",
-    price: 70.00,
-    imageUrl: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwYmFuYW5hc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
-    quantityUnit: "per dozen",
-  },
-  {
-    id: "9",
-    name: "Fresh Oranges",
-    description: "Juicy and sweet oranges, perfect for a healthy snack or fresh juice.",
-    price: 100.00,
-    imageUrl: "/oranges.jpg",
-    quantityUnit: "per kg",
-  },
-  {
-    id: "10",
-    name: "Bitter Gourd (Karela)",
-    description: "Fresh bitter gourd, known for its health benefits and unique taste.",
-    price: 70.00,
-    imageUrl: "/karela.jpg",
-    quantityUnit: "per kg",
-  },
-  {
-    id: "11",
-    name: "Garlic",
-    description: "Pungent and flavorful garlic, essential for many cuisines.",
-    price: 120.00,
-    imageUrl: "/garlic.jpg",
-    quantityUnit: "per 250g",
-  },
-];
+import EditProductPage from "./EditProductPage"; // Import to access dummyProducts
 
 const VendorDashboard = () => {
+  // Use the dummyProducts from EditProductPage for consistency
+  const products = EditProductPage.dummyProducts; 
+
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-50 dark:bg-gray-950 p-4">
       <div className="w-full max-w-6xl mx-auto py-8">
@@ -82,7 +19,7 @@ const VendorDashboard = () => {
         </p>
         
         <div className="flex justify-center mb-8">
-          <Link to="/vendor-add-product"> {/* Updated Link */}
+          <Link to="/vendor-add-product">
             <Button className="px-6 py-3 text-lg bg-green-600 hover:bg-green-700 text-white shadow-lg transform transition-transform hover:scale-105">
               Add New Product
             </Button>
@@ -90,7 +27,7 @@ const VendorDashboard = () => {
         </div>
 
         <h2 className="text-3xl font-semibold mb-6 text-gray-800 dark:text-gray-100 text-center">Your Listed Products</h2>
-        <VendorProducts products={dummyProducts} />
+        <VendorProducts products={products} />
 
         <div className="mt-12 text-center">
           <Link to="/">

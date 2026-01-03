@@ -13,12 +13,14 @@ interface Product {
   minOrderQuantity: number;
   availableQuantity: number;
   vendorName: string;
+  latitude?: number; // Added for location feature
+  longitude?: number; // Added for location feature
 }
 
 interface ClientProductListingsProps {
   products: Product[];
   onAddToCart: (product: Product, quantity: number) => void;
-  onProductClick: (product: Product) => void; // New prop
+  onProductClick: (product: Product) => void;
 }
 
 const ClientProductListings: React.FC<ClientProductListingsProps> = ({ products, onAddToCart, onProductClick }) => {
@@ -32,7 +34,7 @@ const ClientProductListings: React.FC<ClientProductListingsProps> = ({ products,
             key={product.id} 
             product={product} 
             onAddToCart={onAddToCart} 
-            onProductClick={onProductClick} // Pass the new prop
+            onProductClick={onProductClick}
           />
         ))
       )}

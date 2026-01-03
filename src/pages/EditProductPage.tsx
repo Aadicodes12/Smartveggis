@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,8 +9,135 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
-const AddProductPage = () => {
+// Define a Product interface for consistency
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  quantityUnit: string;
+  imageUrl: string;
+  minOrderQuantity: number;
+  availableQuantity: number;
+  vendorName: string;
+  latitude?: number; // Added for location feature
+  longitude?: number; // Added for location feature
+}
+
+// Dummy data for demonstration. In a real app, this would come from an API.
+const dummyProducts: Product[] = [
+  {
+    id: "1",
+    name: "Organic Apples",
+    description: "Freshly picked organic apples, sweet and crisp. Perfect for snacking or baking.",
+    price: 120.00,
+    quantityUnit: "per kg",
+    imageUrl: "/apple.jpg",
+    minOrderQuantity: 1,
+    availableQuantity: 50,
+    vendorName: "Patil Farms",
+    latitude: 28.6139, // Example latitude for Delhi
+    longitude: 77.2090, // Example longitude for Delhi
+  },
+  {
+    id: "2",
+    name: "Heirloom Tomatoes",
+    description: "Vibrant and flavorful heirloom tomatoes, ideal for salads and gourmet dishes.",
+    price: 90.00,
+    quantityUnit: "per kg",
+    imageUrl: "/tomato.jpg",
+    minOrderQuantity: 0.5,
+    availableQuantity: 30,
+    vendorName: "Ramesh Ecogrow",
+    latitude: 19.0760, // Example latitude for Mumbai
+    longitude: 72.8777, // Example longitude for Mumbai
+  },
+  {
+    id: "3",
+    name: "Fresh Spinach",
+    description: "Nutrient-rich fresh spinach, great for smoothies, salads, or sautéing.",
+    price: 60.00,
+    quantityUnit: "per bunch",
+    imageUrl: "/spinach.jpg",
+    minOrderQuantity: 1,
+    availableQuantity: 100,
+    vendorName: "Mukesh Harvest",
+    latitude: 12.9716, // Example latitude for Bangalore
+    longitude: 77.5946, // Example longitude for Bangalore
+  },
+  {
+    id: "4",
+    name: "Sweet Potatoes",
+    description: "Naturally sweet and versatile sweet potatoes, perfect for roasting or mashing.",
+    price: 90.00,
+    quantityUnit: "per kg",
+    imageUrl: "/potato.jpg",
+    minOrderQuantity: 2,
+    availableQuantity: 80,
+    vendorName: "Farm fresh Co.",
+    latitude: 28.6139, // Example latitude for Delhi
+    longitude: 77.2090, // Example longitude for Delhi
+  },
+  {
+    id: "5",
+    name: "Organic Bananas",
+    description: "Ripe organic bananas, a healthy and convenient snack.",
+    price: 70.00,
+    quantityUnit: "per dozen",
+    imageUrl: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwYmFuYW5hc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
+    minOrderQuantity: 1,
+    availableQuantity: 60,
+    vendorName: "Gupta Farm Pvt Ltd.",
+    latitude: 19.0760, // Example latitude for Mumbai
+    longitude: 72.8777, // Example longitude for Mumbai
+  },
+  {
+    id: "9",
+    name: "Fresh Oranges",
+    description: "Juicy and sweet oranges, perfect for a healthy snack or fresh juice.",
+    price: 100.00,
+    quantityUnit: "per kg",
+    imageUrl: "/oranges.jpg",
+    minOrderQuantity: 1,
+    availableQuantity: 45,
+    vendorName: "Citrus Fruit",
+    latitude: 12.9716, // Example latitude for Bangalore
+    longitude: 77.5946, // Example longitude for Bangalore
+  },
+  {
+    id: "10",
+    name: "Bitter Gourd (Karela)",
+    description: "Fresh bitter gourd, known for its health benefits and unique taste.",
+    price: 70.00,
+    quantityUnit: "per kg",
+    imageUrl: "/karela.jpg",
+    minOrderQuantity: 0.5,
+    availableQuantity: 35,
+    vendorName: "Healthy Bites",
+    latitude: 28.6139, // Example latitude for Delhi
+    longitude: 77.2090, // Example longitude for Delhi
+  },
+  {
+    id: "11",
+    name: "Garlic",
+    description: "Pungent and flavorful garlic, essential for many cuisines.",
+    price: 120.00,
+    quantityUnit: "per 250g",
+    imageUrl: "/garlic.jpg",
+    minOrderQuantity: 0.25,
+    availableQuantity: 60,
+    vendorName: "Spice Route",
+    latitude: 19.0760, // Example latitude for Mumbai
+    longitude: 72.8777, // Example longitude for Mumbai
+  },
+];
+
+
+const EditProductPage = () => {
   const navigate = useNavigate();
+  const { productId } = useParams<{ productId: string }>();
+  const [product, setProduct] = useState<Product | null>(null);
+
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState<number | string>("");
@@ -18,11 +145,35 @@ const AddProductPage = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [minOrderQuantity, setMinOrderQuantity] = useState<number | string>("");
   const [availableQuantity, setAvailableQuantity] = useState<number | string>("");
-  const [latitude, setLatitude] = useState<number | string>(""); // New state for latitude
-  const [longitude, setLongitude] = useState<number | string>(""); // New state for longitude
+  const [latitude, setLatitude] = useState<number | string>("");
+  const [longitude, setLongitude] = useState<number | string>("");
+
+  useEffect(() => {
+    if (productId) {
+      // In a real app, you'd fetch product data from an API using productId
+      const foundProduct = dummyProducts.find((p) => p.id === productId);
+      if (foundProduct) {
+        setProduct(foundProduct);
+        setProductName(foundProduct.name);
+        setDescription(foundProduct.description);
+        setPrice(foundProduct.price);
+        setQuantityUnit(foundProduct.quantityUnit);
+        setImageUrl(foundProduct.imageUrl);
+        setMinOrderQuantity(foundProduct.minOrderQuantity);
+        setAvailableQuantity(foundProduct.availableQuantity);
+        setLatitude(foundProduct.latitude || "");
+        setLongitude(foundProduct.longitude || "");
+      } else {
+        toast.error("Product not found.");
+        navigate("/vendor-dashboard");
+      }
+    }
+  }, [productId, navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!product) return;
 
     // Basic validation
     if (!productName || !description || !price || !quantityUnit || !imageUrl || !minOrderQuantity || !availableQuantity || !latitude || !longitude) {
@@ -55,8 +206,8 @@ const AddProductPage = () => {
       return;
     }
 
-    const newProduct = {
-      id: String(Date.now()), // Simple unique ID for now
+    const updatedProduct: Product = {
+      ...product,
       name: productName,
       description,
       price: Number(price),
@@ -64,26 +215,33 @@ const AddProductPage = () => {
       imageUrl,
       minOrderQuantity: Number(minOrderQuantity),
       availableQuantity: Number(availableQuantity),
-      vendorName: "Your Vendor Name", // Placeholder, would be dynamic in a real app
-      latitude: Number(latitude), // Include latitude
-      longitude: Number(longitude), // Include longitude
+      latitude: Number(latitude),
+      longitude: Number(longitude),
     };
 
-    console.log("New product added:", newProduct);
-    toast.success("Product added successfully!");
+    console.log("Updated product:", updatedProduct);
+    toast.success("Product updated successfully!");
 
     // In a real application, you would send this data to a backend API.
     // For now, we'll just navigate back to the vendor dashboard.
     navigate("/vendor-dashboard");
   };
 
+  if (!product) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
+        <p className="text-lg text-gray-600 dark:text-gray-400">Loading product details...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
       <Card className="w-full max-w-2xl">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold text-green-700 dark:text-green-400">Add New Product</CardTitle>
+          <CardTitle className="text-3xl font-bold text-green-700 dark:text-green-400">Edit Product</CardTitle>
           <CardDescription className="text-gray-600 dark:text-gray-400">
-            Enter the details for your new product listing.
+            Modify the details for your product listing.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -198,7 +356,7 @@ const AddProductPage = () => {
               </div>
             </div>
             <Button type="submit" className="w-full py-3 text-lg bg-green-600 hover:bg-green-700 text-white">
-              Add Product
+              Update Product
             </Button>
           </form>
           <div className="mt-6 text-center text-sm">
@@ -212,4 +370,4 @@ const AddProductPage = () => {
   );
 };
 
-export default AddProductPage;
+export default EditProductPage;

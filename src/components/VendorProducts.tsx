@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
@@ -11,7 +12,9 @@ interface Product {
   description: string;
   price: number;
   imageUrl: string;
-  quantityUnit?: string; // Make quantityUnit optional for now, or ensure it's always provided
+  quantityUnit?: string;
+  latitude?: number; // Added for location feature
+  longitude?: number; // Added for location feature
 }
 
 interface VendorProductsProps {
@@ -19,9 +22,10 @@ interface VendorProductsProps {
 }
 
 const VendorProducts: React.FC<VendorProductsProps> = ({ products }) => {
+  const navigate = useNavigate(); // Initialize useNavigate
+
   const handleEdit = (productId: string) => {
-    console.log(`Edit product with ID: ${productId}`);
-    // In a real application, this would navigate to an edit page or open a modal
+    navigate(`/vendor-edit-product/${productId}`); // Navigate to the edit page
   };
 
   const handleDelete = (productId: string) => {

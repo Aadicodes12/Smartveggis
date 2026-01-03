@@ -18,6 +18,8 @@ interface Product {
   minOrderQuantity: number;
   availableQuantity: number;
   vendorName: string;
+  latitude?: number; // Added for location feature
+  longitude?: number; // Added for location feature
 }
 
 interface ProductPreviewDialogProps {
@@ -61,7 +63,7 @@ const ProductPreviewDialog: React.FC<ProductPreviewDialogProps> = ({ product, is
 
     onAddToCart(product, desiredQuantity);
     toast.success(`${desiredQuantity} ${product.quantityUnit} of ${product.name} added to cart.`);
-    onClose(); // Close the dialog after adding to cart
+    onClose();
   };
 
   if (!product) {
