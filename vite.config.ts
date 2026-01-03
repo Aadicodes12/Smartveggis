@@ -15,6 +15,6 @@ export default defineConfig(() => ({
     },
   },
   optimizeDeps: {
-    include: ["react-map-gl"], // Add react-map-gl to optimizeDeps
+    include: ["react-map-gl", "mapbox-gl"], // Added mapbox-gl here
   },
 }));
