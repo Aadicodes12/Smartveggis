@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import ClientProductListings from "@/components/ClientProductListings";
 import BuyerDashboardLayout from "@/components/BuyerDashboardLayout";
 import ProductPreviewDialog from "@/components/ProductPreviewDialog";
-import UserProfileCard from "@/components/UserProfileCard"; // New import
+import UserProfileCard from "@/components/UserProfileCard";
 import { Product, dummyProducts } from "@/data/dummyProducts";
-import { useSession } from "@/contexts/SessionContext"; // New import
-import { useLanguage } from "@/contexts/LanguageContext"; // New import
+import { useSession } from "@/contexts/SessionContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CartItem {
   id: string;
@@ -20,8 +20,8 @@ interface CartItem {
 }
 
 const ClientDashboard = () => {
-  const { user, profile, isLoading, signOut } = useSession(); // Use session context
-  const { t } = useLanguage(); // Use language context
+  const { user, profile, isLoading, signOut } = useSession();
+  const { t } = useLanguage();
 
   const initialProducts: Product[] = dummyProducts;
 
@@ -80,20 +80,6 @@ const ClientDashboard = () => {
     );
   }
 
-  if (!user || profile?.role !== 'client') {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-950 p-4 text-center">
-        <h1 className="text-3xl font-bold text-red-600 dark:text-red-400 mb-4">Access Denied</h1>
-        <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">You must be logged in as a client to view this page.</p>
-        <Link to="/auth">
-          <Button className="px-6 py-3 text-lg bg-green-600 hover:bg-green-700 text-white">
-            Go to Login
-          </Button>
-        </Link>
-      </div>
-    );
-  }
-
   return (
     <BuyerDashboardLayout cartItems={cartItems} onSearch={handleSearch} onRemoveFromCart={handleRemoveFromCart}>
       <div className="w-full max-w-6xl mx-auto py-4">
@@ -120,9 +106,17 @@ const ClientDashboard = () => {
         />
 
         <div className="mt-12 text-center">
-          <Button onClick={signOut} variant="destructive" className="px-6 py-3 text-lg shadow-lg transform transition-transform hover:scale-105">
-            {t('logout')}
-          </Button>
+          {user ? (
+            <Button onClick={signOut} variant="destructive" className="px-6 py-3 text-lg shadow-lg transform transition-transform hover:scale-105">
+              {t('logout')}
+            </Button>
+          ) : (
+            <Link to="/auth">
+              <Button className="px-6 py-3 text-lg bg-green-600 hover:bg-green-700 text-white">
+                Go to Login
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
 
