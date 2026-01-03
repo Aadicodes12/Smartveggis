@@ -1,6 +1,5 @@
 "use client";
 
-import { MadeWithDyad } from "@/components/made-with-dyad";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,9 +28,6 @@ const Index = () => {
           </div>
         </CardContent>
       </Card>
-      <div className="mt-8">
-        <MadeWithDyad />
-      </div>
     </div>
   );
 };
