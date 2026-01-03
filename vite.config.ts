@@ -14,4 +14,7 @@ export default defineConfig(() => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  optimizeDeps: {
+    include: ["react-map-gl"], // Add react-map-gl to optimizeDeps
+  },
 }));
