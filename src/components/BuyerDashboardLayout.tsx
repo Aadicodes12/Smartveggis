@@ -38,6 +38,7 @@ interface BuyerDashboardLayoutProps {
   deliveryLocationFilter: string;
   setDeliveryLocationFilter: (location: string) => void;
   availableCategories: string[];
+  userLocation: { lat: number; lng: number } | null; // New prop for user's location
 }
 
 const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({
@@ -54,6 +55,7 @@ const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({
   deliveryLocationFilter,
   setDeliveryLocationFilter,
   availableCategories,
+  userLocation, // Destructure new prop
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const isMobile = useIsMobile();
@@ -159,8 +161,9 @@ const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({
             id="delivery-location-filter"
             type="text"
             placeholder="e.g., New Delhi"
-            value={deliveryLocationFilter}
+            value={userLocation ? t('your_current_location') : deliveryLocationFilter}
             onChange={(e) => setDeliveryLocationFilter(e.target.value)}
+            readOnly={!!userLocation} // Make it read-only if userLocation is available
             className="w-full"
           />
         </div>

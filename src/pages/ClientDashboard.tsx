@@ -313,6 +313,7 @@ const ClientDashboard = () => {
       deliveryLocationFilter={deliveryLocationFilter}
       setDeliveryLocationFilter={setDeliveryLocationFilter}
       availableCategories={availableCategories}
+      userLocation={userLocation} // Pass userLocation to BuyerDashboardLayout
     >
       <div className="w-full max-w-6xl mx-auto py-4">
         <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">Available Products</h1>
