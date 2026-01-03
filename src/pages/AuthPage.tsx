@@ -158,7 +158,6 @@ const AuthPage = () => {
             localization={{
               variables: localization[language],
             }}
-            // magicLink={true} // Removed to ensure phone option is visible
             otp
             phone
           />
