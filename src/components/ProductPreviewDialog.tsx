@@ -84,6 +84,11 @@ const ProductPreviewDialog: React.FC<ProductPreviewDialogProps> = ({ product, is
             <p className="text-md text-gray-500 dark:text-gray-400">
               <span className="font-semibold">Vendor:</span> {product.vendorName}
             </p>
+            {product.city && (
+              <p className="text-md text-gray-500 dark:text-gray-400">
+                <span className="font-semibold">City:</span> {product.city}
+              </p>
+            )}
             <p className="text-2xl font-bold text-green-700 dark:text-green-400">
               ₹{product.price.toFixed(2)} <span className="text-base font-normal text-gray-500 dark:text-gray-400">{product.quantityUnit}</span>
             </p>

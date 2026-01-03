@@ -41,6 +41,11 @@ const VendorProducts: React.FC<VendorProductsProps> = ({ products }) => {
               <p className="text-lg font-bold text-green-700 dark:text-green-400 mb-4">
                 ₹{product.price.toFixed(2)} {product.quantityUnit || "per kg"}
               </p>
+              {product.city && (
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                  City: {product.city}
+                </p>
+              )}
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => handleEdit(product.id)} className="flex-1">
                   <Pencil className="h-4 w-4 mr-2" /> Edit

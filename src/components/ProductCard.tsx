@@ -56,6 +56,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onProdu
           {product.description}
         </CardDescription>
         <p className="text-sm text-gray-500 dark:text-gray-400">Vendor: {product.vendorName}</p>
+        {product.city && (
+          <p className="text-sm text-gray-500 dark:text-gray-400">City: {product.city}</p>
+        )}
       </CardHeader>
       <CardContent className="flex-grow flex flex-col justify-between p-4 pt-0">
         <p className="text-lg font-bold text-green-700 dark:text-green-400 mb-2">

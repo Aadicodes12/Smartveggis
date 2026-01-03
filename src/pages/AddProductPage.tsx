@@ -18,14 +18,13 @@ const AddProductPage = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [minOrderQuantity, setMinOrderQuantity] = useState<number | string>("");
   const [availableQuantity, setAvailableQuantity] = useState<number | string>("");
-  const [latitude, setLatitude] = useState<number | string>(""); // New state for latitude
-  const [longitude, setLongitude] = useState<number | string>(""); // New state for longitude
+  const [city, setCity] = useState(""); // Changed from latitude and longitude
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     // Basic validation
-    if (!productName || !description || !price || !quantityUnit || !imageUrl || !minOrderQuantity || !availableQuantity || !latitude || !longitude) {
+    if (!productName || !description || !price || !quantityUnit || !imageUrl || !minOrderQuantity || !availableQuantity || !city) {
       toast.error("Please fill in all fields.");
       return;
     }
@@ -46,14 +45,6 @@ const AddProductPage = () => {
       toast.error("Minimum Order Quantity cannot be greater than Available Quantity.");
       return;
     }
-    if (isNaN(Number(latitude)) || Number(latitude) < -90 || Number(latitude) > 90) {
-      toast.error("Latitude must be a number between -90 and 90.");
-      return;
-    }
-    if (isNaN(Number(longitude)) || Number(longitude) < -180 || Number(longitude) > 180) {
-      toast.error("Longitude must be a number between -180 and 180.");
-      return;
-    }
 
     const newProduct = {
       id: String(Date.now()), // Simple unique ID for now
@@ -65,8 +56,7 @@ const AddProductPage = () => {
       minOrderQuantity: Number(minOrderQuantity),
       availableQuantity: Number(availableQuantity),
       vendorName: "Your Vendor Name", // Placeholder, would be dynamic in a real app
-      latitude: Number(latitude), // Include latitude
-      longitude: Number(longitude), // Include longitude
+      city: city, // Include city
     };
 
     console.log("New product added:", newProduct);
@@ -171,31 +161,16 @@ const AddProductPage = () => {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="latitude">Latitude</Label>
-                <Input
-                  id="latitude"
-                  type="number"
-                  step="0.000001"
-                  placeholder="e.g., 28.6139"
-                  value={latitude}
-                  onChange={(e) => setLatitude(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="longitude">Longitude</Label>
-                <Input
-                  id="longitude"
-                  type="number"
-                  step="0.000001"
-                  placeholder="e.g., 77.2090"
-                  value={longitude}
-                  onChange={(e) => setLongitude(e.target.value)}
-                  required
-                />
-              </div>
+            <div className="grid gap-2">
+              <Label htmlFor="city">City</Label>
+              <Input
+                id="city"
+                type="text"
+                placeholder="e.g., Mumbai"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                required
+              />
             </div>
             <Button type="submit" className="w-full py-3 text-lg bg-green-600 hover:bg-green-700 text-white">
               Add Product
