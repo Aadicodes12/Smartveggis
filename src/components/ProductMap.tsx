@@ -1,18 +1,18 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import Map, { Marker, Popup } from "react-map-gl";
+import * as ReactMapGL from "react-map-gl"; // Changed to namespace import
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Product } from "@/data/dummyProducts";
 import { MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface ProductMapProps {
   products: Product[];
   onProductClick: (product: Product) => void;
 }
 
-// Removed MAPTILER_API_KEY and MAPTILER_STYLE_URL
+const MAPTILER_API_KEY = "v3zje79lMMfySZVAQUvO"; // Your MapTiler API key
+const MAPTILER_STYLE_URL = `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_API_KEY}`;
 
 const ProductMap: React.FC<ProductMapProps> = ({ products, onProductClick }) => {
   const [viewport, setViewport] = useState({
@@ -24,38 +24,39 @@ const ProductMap: React.FC<ProductMapProps> = ({ products, onProductClick }) => 
 
   const mapRef = useRef<any>(null);
 
-  const handleViewportChange = (event: any) => {
+  const handleViewportChange = (event: ReactMapGL.ViewStateChangeEvent) => { // Use ReactMapGL.ViewStateChangeEvent
     setViewport(event.viewState);
   };
 
   return (
     <div className="w-full h-[600px] rounded-lg overflow-hidden shadow-lg">
-      <Map
+      <ReactMapGL.Map // Use ReactMapGL.Map
         ref={mapRef}
-        // Removed mapboxAccessToken and mapStyle props
+        mapboxAccessToken={MAPTILER_API_KEY} // MapTiler uses Mapbox GL JS, so this prop is used for the key
         initialViewState={viewport}
         style={{ width: "100%", height: "100%" }}
+        mapStyle={MAPTILER_STYLE_URL}
         onMove={handleViewportChange}
       >
         {products.map((product) => (
           product.latitude && product.longitude && (
-            <Marker
+            <ReactMapGL.Marker // Use ReactMapGL.Marker
               key={product.id}
               latitude={product.latitude}
               longitude={product.longitude}
               anchor="bottom"
               onClick={(e) => {
-                e.originalEvent.stopPropagation();
+                e.originalEvent.stopPropagation(); // Prevent map click event from firing
                 setPopupInfo(product);
               }}
             >
               <MapPin className="h-8 w-8 text-green-600 cursor-pointer" />
-            </Marker>
+            </ReactMapGL.Marker>
           )
         ))}
 
         {popupInfo && (
-          <Popup
+          <ReactMapGL.Popup // Use ReactMapGL.Popup
             anchor="top"
             latitude={popupInfo.latitude!}
             longitude={popupInfo.longitude!}
@@ -71,20 +72,20 @@ const ProductMap: React.FC<ProductMapProps> = ({ products, onProductClick }) => 
               <p className="text-md font-bold text-green-700 mt-2">
                 ₹{popupInfo.price.toFixed(2)} {popupInfo.quantityUnit}
               </p>
-              <Button
-                size="sm"
+              <Button 
+                size="sm" 
                 className="mt-3 w-full bg-green-600 hover:bg-green-700 text-white"
                 onClick={() => {
                   onProductClick(popupInfo);
-                  setPopupInfo(null);
+                  setPopupInfo(null); // Close popup after clicking
                 }}
               >
                 View Details
               </Button>
             </div>
-          </Popup>
+          </ReactMapGL.Popup>
         )}
-      </Map>
+      </ReactMapGL.Map>
     </div>
   );
 };
