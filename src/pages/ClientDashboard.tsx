@@ -34,7 +34,7 @@ const dummyProducts: Product[] = [
     description: "Freshly picked organic apples, sweet and crisp. Perfect for snacking or baking.",
     price: 250.00,
     quantityUnit: "per kg",
-    imageUrl: "https://images.unsplash.com/photo-1568702528493-07521216191b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwYXBwbGVzfGVufDB8fHx8MTcxOTk0NjY1Nnww&ixlib=rb-4.0.3&q=80&w=1080",
+    imageUrl: "/apple.jpg", // Updated image path
     minOrderQuantity: 1,
     availableQuantity: 50,
     vendorName: "Green Farms",
@@ -56,7 +56,7 @@ const dummyProducts: Product[] = [
     description: "Nutrient-rich fresh spinach, great for smoothies, salads, or sautéing.",
     price: 60.00,
     quantityUnit: "per bunch",
-    imageUrl: "https://images.unsplash.com/photo-1554679608-9c726d191223?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxmcmVzaCUyMHNwaW5hY2h8ZW58MHx8fHwxNzE5OTQ2NjU3fDA&ixlib=rb-4.0.3&q=80&w=1080",
+    imageUrl: "/spinach.jpg", // Updated image path
     minOrderQuantity: 1,
     availableQuantity: 100,
     vendorName: "Organic Harvest",
@@ -67,7 +67,7 @@ const dummyProducts: Product[] = [
     description: "Naturally sweet and versatile sweet potatoes, perfect for roasting or mashing.",
     price: 90.00,
     quantityUnit: "per kg",
-    imageUrl: "https://images.unsplash.com/photo-1597363280000-314199701503?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxzcHJvdXQlMjBwb3RhdG9lc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
+    imageUrl: "/potato.jpg", // Updated image path
     minOrderQuantity: 2,
     availableQuantity: 80,
     vendorName: "Farm Fresh Co.",
@@ -115,6 +115,17 @@ const dummyProducts: Product[] = [
     minOrderQuantity: 1,
     availableQuantity: 25,
     vendorName: "Green Goodness",
+  },
+  {
+    id: "9",
+    name: "Fresh Oranges",
+    description: "Juicy and sweet oranges, perfect for a healthy snack or fresh juice.",
+    price: 100.00,
+    quantityUnit: "per kg",
+    imageUrl: "/oranges.jpg", // Updated image path
+    minOrderQuantity: 1,
+    availableQuantity: 45,
+    vendorName: "Citrus Grove",
   },
 ];
 
@@ -191,7 +202,7 @@ const ClientDashboard = () => {
         <ClientProductListings 
           products={filteredProducts} 
           onAddToCart={handleAddToCart} 
-          onProductClick={handleProductClick} // Pass the new handler
+          onProductClick={handleProductClick} 
         />
 
         <div className="mt-12 text-center">
