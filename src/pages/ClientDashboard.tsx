@@ -31,11 +31,11 @@ interface CartItem {
 }
 
 const ClientDashboard = () => {
-  // Use the dummyProducts from EditProductPage for consistency
-  const dummyProducts: Product[] = EditProductPage.dummyProducts;
+  // Use the dummyProducts from EditProductPage for consistency, ensuring it's always an array
+  const initialProducts: Product[] = EditProductPage.dummyProducts || [];
 
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(dummyProducts);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(initialProducts);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductPreviewOpen, setIsProductPreviewOpen] = useState(false);
 
@@ -55,11 +55,11 @@ const ClientDashboard = () => {
 
   const handleSearch = (query: string) => {
     if (!query) {
-      setFilteredProducts(dummyProducts);
+      setFilteredProducts(initialProducts); // Use initialProducts here as well
       return;
     }
     const lowerCaseQuery = query.toLowerCase();
-    const results = dummyProducts.filter(
+    const results = initialProducts.filter( // Filter from initialProducts
       (product) =>
         product.name.toLowerCase().includes(lowerCaseQuery) ||
         product.vendorName.toLowerCase().includes(lowerCaseQuery)
