@@ -155,36 +155,6 @@ const initialProducts: Product[] = [
     category: "Spices",
     vendorRating: 4.3,
   },
-  {
-    id: "12",
-    name: "Cabbage",
-    description: "Fresh green cabbage, great for salads and stir-fries.",
-    price: 40.00,
-    quantityUnit: "per kg",
-    imageUrl: "https://images.unsplash.com/photo-1590005354167-6dafe5cdace5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxjYWJiYWdlfGVufDB8fHx8MTcxOTk0NjY1N3ww&ixlib=rb-4.0.3&q=80&w=1080",
-    minOrderQuantity: 1,
-    availableQuantity: 70,
-    vendorName: "Green Fields",
-    latitude: 18.5204, // Pune
-    longitude: 73.8567, // Pune
-    category: "Vegetables",
-    vendorRating: 4.1,
-  },
-  {
-    id: "13",
-    name: "Bell Peppers",
-    description: "Colorful bell peppers, perfect for adding crunch and flavor.",
-    price: 150.00,
-    quantityUnit: "per kg",
-    imageUrl: "https://images.unsplash.com/photo-1518843875456-df49b7921538?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxiZWxsJTIwcGVwcGVyc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
-    minOrderQuantity: 0.5,
-    availableQuantity: 40,
-    vendorName: "Rainbow Harvest",
-    latitude: 26.8467, // Lucknow
-    longitude: 80.9462, // Lucknow
-    category: "Vegetables",
-    vendorRating: 4.6,
-  },
 ];
 
 const ClientDashboard = () => {
