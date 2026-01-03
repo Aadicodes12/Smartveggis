@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import Map, { Marker, Popup } from "react-map-gl";
+import Map, { Marker, Popup } from "react-map-gl"; // Revert to standard named imports
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Product } from "@/data/dummyProducts";
 import { MapPin } from "lucide-react";
@@ -12,7 +12,8 @@ interface ProductMapProps {
   onProductClick: (product: Product) => void;
 }
 
-// Removed MAPTILER_API_KEY and MAPTILER_STYLE_URL
+const MAPTILER_API_KEY = "v3zje79lMMfySZVAQUvO"; // Your MapTiler API key
+const MAPTILER_STYLE_URL = `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_API_KEY}`;
 
 const ProductMap: React.FC<ProductMapProps> = ({ products, onProductClick }) => {
   const [viewport, setViewport] = useState({
@@ -24,7 +25,7 @@ const ProductMap: React.FC<ProductMapProps> = ({ products, onProductClick }) => 
 
   const mapRef = useRef<any>(null);
 
-  const handleViewportChange = (event: any) => {
+  const handleViewportChange = (event: any) => { // Using 'any' for event type to avoid type errors
     setViewport(event.viewState);
   };
 
@@ -32,9 +33,10 @@ const ProductMap: React.FC<ProductMapProps> = ({ products, onProductClick }) => 
     <div className="w-full h-[600px] rounded-lg overflow-hidden shadow-lg">
       <Map
         ref={mapRef}
-        // Removed mapboxAccessToken and mapStyle props
+        mapboxAccessToken={MAPTILER_API_KEY}
         initialViewState={viewport}
         style={{ width: "100%", height: "100%" }}
+        mapStyle={MAPTILER_STYLE_URL}
         onMove={handleViewportChange}
       >
         {products.map((product) => (
