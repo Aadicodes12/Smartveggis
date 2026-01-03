@@ -3,7 +3,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LeafyGreen, ShoppingCart } from "lucide-react"; // Adding some icons for visual appeal
+import { LeafyGreen, ShoppingCart } from "lucide-react";
 
 const Index = () => {
   return (
@@ -18,13 +18,12 @@ const Index = () => {
             <ShoppingCart className="h-12 w-12 text-green-600 dark:text-green-400" />
           </div>
           <CardDescription className="text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
-            Your ultimate marketplace for fresh, locally sourced fruits and vegetables.
-            Connect directly with growers and buyers!
+            Your marketplace for fresh, local fruits and vegetables.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6 mt-6">
           <p className="text-lg text-gray-800 dark:text-gray-200 font-medium">
-            Are you a buyer looking for fresh produce or a vendor ready to sell your harvest?
+            Are you a buyer or a vendor?
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-6">
             <Link to="/client-login">
