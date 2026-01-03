@@ -6,7 +6,10 @@ import { Button } from "@/components/ui/button";
 import ClientProductListings from "@/components/ClientProductListings";
 import BuyerDashboardLayout from "@/components/BuyerDashboardLayout";
 import ProductPreviewDialog from "@/components/ProductPreviewDialog";
-import { Product, dummyProducts } from "@/data/dummyProducts"; // Import from new centralized file
+import UserProfileCard from "@/components/UserProfileCard"; // New import
+import { Product, dummyProducts } from "@/data/dummyProducts";
+import { useSession } from "@/contexts/SessionContext"; // New import
+import { useLanguage } from "@/contexts/LanguageContext"; // New import
 
 interface CartItem {
   id: string;
@@ -17,6 +20,9 @@ interface CartItem {
 }
 
 const ClientDashboard = () => {
+  const { user, profile, isLoading, signOut } = useSession(); // Use session context
+  const { t } = useLanguage(); // Use language context
+
   const initialProducts: Product[] = dummyProducts;
 
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -66,14 +72,40 @@ const ClientDashboard = () => {
     setSelectedProduct(null);
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+        <p className="text-lg text-gray-600 dark:text-gray-400">Loading dashboard...</p>
+      </div>
+    );
+  }
+
+  if (!user || profile?.role !== 'client') {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-950 p-4 text-center">
+        <h1 className="text-3xl font-bold text-red-600 dark:text-red-400 mb-4">Access Denied</h1>
+        <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">You must be logged in as a client to view this page.</p>
+        <Link to="/auth">
+          <Button className="px-6 py-3 text-lg bg-green-600 hover:bg-green-700 text-white">
+            Go to Login
+          </Button>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <BuyerDashboardLayout cartItems={cartItems} onSearch={handleSearch} onRemoveFromCart={handleRemoveFromCart}>
       <div className="w-full max-w-6xl mx-auto py-4">
-        <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">Available Products</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">{t('welcome_client')}</h1>
         <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 text-center">
           Explore fresh fruits and vegetables from local vendors.
         </p>
         
+        <div className="mb-8">
+          {user && <UserProfileCard userId={user.id} />}
+        </div>
+
         <div className="flex justify-between items-center mb-6 px-4">
           <div className="flex gap-2">
           </div>
@@ -88,11 +120,9 @@ const ClientDashboard = () => {
         />
 
         <div className="mt-12 text-center">
-          <Link to="/">
-            <Button variant="outline" className="px-6 py-3 text-lg border-green-600 text-green-600 hover:bg-green-50 dark:border-green-400 dark:text-green-400 dark:hover:bg-gray-700 shadow-lg transform transition-transform hover:scale-105">
-              Back to Home
-            </Button>
-          </Link>
+          <Button onClick={signOut} variant="destructive" className="px-6 py-3 text-lg shadow-lg transform transition-transform hover:scale-105">
+            {t('logout')}
+          </Button>
         </div>
       </div>
 
