@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import ClientProductListings from "@/components/ClientProductListings";
 import BuyerDashboardLayout from "@/components/BuyerDashboardLayout";
 import ProductPreviewDialog from "@/components/ProductPreviewDialog";
-// import VendorMap from "@/components/VendorMap"; // Removed VendorMap import
 import { useSupabase } from "@/contexts/SupabaseContext";
 import { toast } from "sonner";
 
@@ -24,6 +23,7 @@ interface Product {
   longitude?: number;
   category: string; // Added category for filtering
   vendorRating: number; // Added vendorRating for filtering
+  vendor_id?: string; // Added vendor_id
 }
 
 interface CartItem {
@@ -34,164 +34,59 @@ interface CartItem {
   orderedQuantity: number;
 }
 
-const initialProducts: Product[] = [
-  {
-    id: "1",
-    name: "Organic Apples",
-    description: "Freshly picked organic apples, sweet and crisp. Perfect for snacking or baking.",
-    price: 120.00,
-    quantityUnit: "per kg",
-    imageUrl: "/apple.jpg",
-    minOrderQuantity: 1,
-    availableQuantity: 50,
-    vendorName: "Patil Farms",
-    latitude: 28.6139, // New Delhi
-    longitude: 77.2090, // New Delhi
-    category: "Fruits",
-    vendorRating: 4.8,
-  },
-  {
-    id: "2",
-    name: "Heirloom Tomatoes",
-    description: "Vibrant and flavorful heirloom tomatoes, ideal for salads and gourmet dishes.",
-    price: 90.00,
-    quantityUnit: "per kg",
-    imageUrl: "/tomato.jpg",
-    minOrderQuantity: 0.5,
-    availableQuantity: 30,
-    vendorName: "Gupta Farm Produce",
-    latitude: 19.0760, // Mumbai
-    longitude: 72.8777, // Mumbai
-    category: "Vegetables",
-    vendorRating: 4.5,
-  },
-  {
-    id: "3",
-    name: "Fresh Spinach",
-    description: "Nutrient-rich fresh spinach, great for smoothies, salads, or sautéing.",
-    price: 60.00,
-    quantityUnit: "per bunch",
-    imageUrl: "/spinach.jpg",
-    minOrderQuantity: 1,
-    availableQuantity: 100,
-    vendorName: "Ecogrow",
-    latitude: 12.9716, // Bengaluru
-    longitude: 77.5946, // Bengaluru
-    category: "Leafy Greens",
-    vendorRating: 4.9,
-  },
-  {
-    id: "4",
-    name: "Sweet Potatoes",
-    description: "Naturally sweet and versatile sweet potatoes, perfect for roasting or mashing.",
-    price: 90.00,
-    quantityUnit: "per kg",
-    imageUrl: "/potato.jpg",
-    minOrderQuantity: 2,
-    availableQuantity: 80,
-    vendorName: "Farm Fresh Co.",
-    latitude: 13.0827, // Chennai
-    longitude: 80.2707, // Chennai
-    category: "Vegetables",
-    vendorRating: 4.2,
-  },
-  {
-    id: "5",
-    name: "Organic Bananas",
-    description: "Ripe organic bananas, a healthy and convenient snack.",
-    price: 70.00,
-    quantityUnit: "per dozen",
-    imageUrl: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwYmFuYW5hc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
-    minOrderQuantity: 1,
-    availableQuantity: 60,
-    vendorName: "Tropical Delights",
-    latitude: 22.5726, // Kolkata
-    longitude: 88.3639, // Kolkata
-    category: "Fruits",
-    vendorRating: 4.7,
-  },
-  {
-    id: "9",
-    name: "Fresh Oranges",
-    description: "Juicy and sweet oranges, perfect for a healthy snack or fresh juice.",
-    price: 100.00,
-    quantityUnit: "per kg",
-    imageUrl: "/oranges.jpg",
-    minOrderQuantity: 1,
-    availableQuantity: 45,
-    vendorName: "Citrus Grove",
-    latitude: 17.3850, // Hyderabad
-    longitude: 78.4867, // Hyderabad
-    category: "Fruits",
-    vendorRating: 4.6,
-  },
-  {
-    id: "10",
-    name: "Bitter Gourd (Karela)",
-    description: "Fresh bitter gourd, known for its health benefits and unique taste.",
-    price: 70.00,
-    quantityUnit: "per kg",
-    imageUrl: "/karela.jpg",
-    minOrderQuantity: 0.5,
-    availableQuantity: 35,
-    vendorName: "Healthy Bites",
-    latitude: 26.9124, // Jaipur
-    longitude: 75.7873, // Jaipur
-    category: "Vegetables",
-    vendorRating: 4.0,
-  },
-  {
-    id: "11",
-    name: "Garlic",
-    description: "Pungent and flavorful garlic, essential for many cuisines.",
-    price: 120.00,
-    quantityUnit: "per 250g",
-    imageUrl: "/garlic.jpg",
-    minOrderQuantity: 0.25,
-    availableQuantity: 60,
-    vendorName: "Spice Route",
-    latitude: 23.0225, // Ahmedabad
-    longitude: 72.5714, // Ahmedabad
-    category: "Spices",
-    vendorRating: 4.3,
-  },
-];
-
 const ClientDashboard = () => {
   const { supabase } = useSupabase();
-  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductPreviewOpen, setIsProductPreviewOpen] = useState(false);
-  // const [showMapView, setShowMapView] = useState(false); // Removed state to toggle between list and map view
-  // const [userLocation, setUserLocation] = useState<{ lat: number; lng: number }>({ lat: 22.3511148, lng: 78.6677428 }); // Removed userLocation state
-
-  // Removed useEffect for geolocation
-  // useEffect(() => {
-  //   if (navigator.geolocation) {
-  //     navigator.geolocation.getCurrentPosition(
-  //       (position) => {
-  //         setUserLocation({
-  //           lat: position.coords.latitude,
-  //           lng: position.coords.longitude,
-  //         });
-  //       },
-  //       (error) => {
-  //         console.error("Error getting user location:", error);
-  //         toast.error("Could not retrieve your location. Showing all vendors at a default location.");
-  //       }
-  //     );
-  //   } else {
-  //     toast.info("Geolocation is not supported by your browser. Showing all vendors at a default location.");
-  //   }
-  // }, []);
 
   // Filter states
   const [categoryFilter, setCategoryFilter] = useState<string>("All");
   const [vendorRatingFilter, setVendorRatingFilter] = useState<number>(0); // Min rating
   const [priceRangeFilter, setPriceRangeFilter] = useState<[number, number]>([0, 500]); // [min, max]
   const [deliveryLocationFilter, setDeliveryLocationFilter] = useState<string>(""); // For future use with geocoding
+
+  const fetchAllProducts = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("products")
+      .select("*");
+
+    if (error) {
+      console.error("Error fetching all products:", error);
+      setError("Failed to load products.");
+      setProducts([]);
+    } else {
+      setProducts(data as Product[]);
+      setError(null);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchAllProducts();
+
+    // Set up real-time subscription for all products
+    const channel = supabase
+      .channel("all_products_changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "products" },
+        (payload) => {
+          console.log("Real-time change received for all products!", payload);
+          fetchAllProducts(); // Re-fetch all products on any change
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase]);
 
   // Apply filters whenever filter states or products change
   useEffect(() => {
@@ -288,6 +183,53 @@ const ClientDashboard = () => {
 
   const availableCategories = ["All", ...new Set(products.map(p => p.category))];
 
+  if (loading) {
+    return (
+      <BuyerDashboardLayout
+        cartItems={cartItems}
+        onSearch={handleSearch}
+        onRemoveFromCart={handleRemoveFromCart}
+        categoryFilter={categoryFilter}
+        setCategoryFilter={setCategoryFilter}
+        vendorRatingFilter={vendorRatingFilter}
+        setVendorRatingFilter={setVendorRatingFilter}
+        priceRangeFilter={priceRangeFilter}
+        setPriceRangeFilter={setPriceRangeFilter}
+        deliveryLocationFilter={deliveryLocationFilter}
+        setDeliveryLocationFilter={setDeliveryLocationFilter}
+        availableCategories={availableCategories}
+      >
+        <div className="w-full max-w-6xl mx-auto py-4 text-center">
+          <p className="text-lg text-gray-600 dark:text-gray-300">Loading products...</p>
+        </div>
+      </BuyerDashboardLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <BuyerDashboardLayout
+        cartItems={cartItems}
+        onSearch={handleSearch}
+        onRemoveFromCart={handleRemoveFromCart}
+        categoryFilter={categoryFilter}
+        setCategoryFilter={setCategoryFilter}
+        vendorRatingFilter={vendorRatingFilter}
+        setVendorRatingFilter={setVendorRatingFilter}
+        priceRangeFilter={priceRangeFilter}
+        setPriceRangeFilter={setPriceRangeFilter}
+        deliveryLocationFilter={deliveryLocationFilter}
+        setDeliveryLocationFilter={setDeliveryLocationFilter}
+        availableCategories={availableCategories}
+      >
+        <div className="w-full max-w-6xl mx-auto py-4 text-center">
+          <p className="text-lg text-red-600 dark:text-red-400 mb-4">{error}</p>
+          <Button onClick={fetchAllProducts}>Retry Loading Products</Button>
+        </div>
+      </BuyerDashboardLayout>
+    );
+  }
+
   return (
     <BuyerDashboardLayout
       cartItems={cartItems}
@@ -302,7 +244,6 @@ const ClientDashboard = () => {
       deliveryLocationFilter={deliveryLocationFilter}
       setDeliveryLocationFilter={setDeliveryLocationFilter}
       availableCategories={availableCategories}
-      // userLocation={userLocation} // Removed userLocation prop
     >
       <div className="w-full max-w-6xl mx-auto py-4">
         <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">Available Products</h1>
@@ -310,25 +251,6 @@ const ClientDashboard = () => {
           Explore fresh fruits and vegetables from local vendors.
         </p>
         
-        {/* Removed map view toggle buttons */}
-        {/* <div className="flex justify-center gap-4 mb-6 px-4">
-          <Button
-            variant={!showMapView ? "default" : "outline"}
-            onClick={() => setShowMapView(false)}
-            className="px-6 py-3 text-lg"
-          >
-            Product Listings
-          </Button>
-          <Button
-            variant={showMapView ? "default" : "outline"}
-            onClick={() => setShowMapView(true)}
-            className="px-6 py-3 text-lg"
-          >
-            View on Map
-          </Button>
-        </div> */}
-
-        {/* Always render ClientProductListings */}
         <ClientProductListings 
           products={filteredProducts} 
           onAddToCart={handleAddToCart} 
