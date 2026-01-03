@@ -1,31 +1,21 @@
 "use client";
 
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  imageUrl: string;
-  quantityUnit?: string;
-  latitude?: number; // Added for location feature
-  longitude?: number; // Added for location feature
-}
+import { Product } from "@/data/dummyProducts"; // Import from new centralized file
 
 interface VendorProductsProps {
   products: Product[];
 }
 
 const VendorProducts: React.FC<VendorProductsProps> = ({ products }) => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleEdit = (productId: string) => {
-    navigate(`/vendor-edit-product/${productId}`); // Navigate to the edit page
+    navigate(`/vendor-edit-product/${productId}`);
   };
 
   const handleDelete = (productId: string) => {

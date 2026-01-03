@@ -7,20 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ShoppingCart, X } from "lucide-react";
 import { toast } from "sonner";
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  quantityUnit: string;
-  imageUrl: string;
-  minOrderQuantity: number;
-  availableQuantity: number;
-  vendorName: string;
-  latitude?: number; // Added for location feature
-  longitude?: number; // Added for location feature
-}
+import { Product } from "@/data/dummyProducts"; // Import from new centralized file
 
 interface ProductPreviewDialogProps {
   product: Product | null;

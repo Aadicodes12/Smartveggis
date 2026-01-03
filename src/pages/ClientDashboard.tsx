@@ -6,21 +6,7 @@ import { Button } from "@/components/ui/button";
 import ClientProductListings from "@/components/ClientProductListings";
 import BuyerDashboardLayout from "@/components/BuyerDashboardLayout";
 import ProductPreviewDialog from "@/components/ProductPreviewDialog";
-import EditProductPage from "./EditProductPage"; // Import to access dummyProducts
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  quantityUnit: string;
-  imageUrl: string;
-  minOrderQuantity: number;
-  availableQuantity: number;
-  vendorName: string;
-  latitude?: number; // Added for location feature
-  longitude?: number; // Added for location feature
-}
+import { Product, dummyProducts } from "@/data/dummyProducts"; // Import from new centralized file
 
 interface CartItem {
   id: string;
@@ -31,8 +17,7 @@ interface CartItem {
 }
 
 const ClientDashboard = () => {
-  // Use the dummyProducts from EditProductPage for consistency, ensuring it's always an array
-  const initialProducts: Product[] = EditProductPage.dummyProducts || [];
+  const initialProducts: Product[] = dummyProducts;
 
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(initialProducts);
@@ -55,11 +40,11 @@ const ClientDashboard = () => {
 
   const handleSearch = (query: string) => {
     if (!query) {
-      setFilteredProducts(initialProducts); // Use initialProducts here as well
+      setFilteredProducts(initialProducts);
       return;
     }
     const lowerCaseQuery = query.toLowerCase();
-    const results = initialProducts.filter( // Filter from initialProducts
+    const results = initialProducts.filter(
       (product) =>
         product.name.toLowerCase().includes(lowerCaseQuery) ||
         product.vendorName.toLowerCase().includes(lowerCaseQuery)
@@ -85,21 +70,10 @@ const ClientDashboard = () => {
           Explore fresh fruits and vegetables from local vendors.
         </p>
         
-        {/* Placeholder for Listings View Toggle and Sorting Options */}
         <div className="flex justify-between items-center mb-6 px-4">
           <div className="flex gap-2">
-            {/* <Button variant="outline" size="sm">Card View</Button>
-            <Button variant="outline" size="sm">List View</Button> */}
-            {/* Implement actual toggle later */}
           </div>
           <div>
-            {/* <select className="p-2 border rounded-md">
-              <option>Sort by: Popularity</option>
-              <option>Sort by: Price (Low to High)</option>
-              <option>Sort by: Price (High to Low)</option>
-              <option>Sort by: Newest</option>
-            </select> */}
-            {/* Implement actual sorting later */}
           </div>
         </div>
 

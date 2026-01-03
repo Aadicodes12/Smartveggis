@@ -4,11 +4,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import VendorProducts from "@/components/VendorProducts";
-import EditProductPage from "./EditProductPage"; // Import to access dummyProducts
+import { Product, dummyProducts } from "@/data/dummyProducts"; // Import from new centralized file
 
 const VendorDashboard = () => {
-  // Use the dummyProducts from EditProductPage for consistency
-  const products = EditProductPage.dummyProducts; 
+  const products: Product[] = dummyProducts; 
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-gray-50 dark:bg-gray-950 p-4">

@@ -2,20 +2,7 @@
 
 import React from "react";
 import ProductCard from "./ProductCard";
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  quantityUnit: string;
-  imageUrl: string;
-  minOrderQuantity: number;
-  availableQuantity: number;
-  vendorName: string;
-  latitude?: number; // Added for location feature
-  longitude?: number; // Added for location feature
-}
+import { Product } from "@/data/dummyProducts"; // Import from new centralized file
 
 interface ClientProductListingsProps {
   products: Product[];
