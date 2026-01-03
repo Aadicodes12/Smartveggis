@@ -9,8 +9,8 @@ import ClientLoginPage from "./pages/ClientLoginPage";
 import VendorLoginPage from "./pages/VendorLoginPage";
 import ClientDashboard from "./pages/ClientDashboard";
 import VendorDashboard from "./pages/VendorDashboard";
-import ClientOrdersPage from "./pages/ClientOrdersPage"; // New import
-import ClientFavoriteVendorsPage from "./pages/ClientFavoriteVendorsPage"; // New import
+import ClientOrdersPage from "./pages/ClientOrdersPage";
+import ClientFavoriteVendorsPage from "./pages/ClientFavoriteVendorsPage";
 import AuthPage from "./pages/AuthPage";
 import SessionContextProvider from "./contexts/SessionContext";
 import LanguageContextProvider from "./contexts/LanguageContext";
@@ -31,8 +31,8 @@ const App = () => (
               <Route path="/vendor-login" element={<VendorLoginPage />} />
               <Route path="/client-dashboard" element={<ClientDashboard />} />
               <Route path="/vendor-dashboard" element={<VendorDashboard />} />
-              <Route path="/client-orders" element={<ClientOrdersPage />} /> {/* New Route */}
-              <Route path="/client-favorite-vendors" element={<ClientFavoriteVendorsPage />} /> {/* New Route */}
+              <Route path="/client-orders" element={<ClientOrdersPage />} />
+              <Route path="/client-favorite-vendors" element={<ClientFavoriteVendorsPage />} />
               <Route path="/auth" element={<AuthPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
