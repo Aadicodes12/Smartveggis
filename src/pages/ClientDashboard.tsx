@@ -44,7 +44,7 @@ const initialProducts: Product[] = [
     imageUrl: "/apple.jpg",
     minOrderQuantity: 1,
     availableQuantity: 50,
-    vendorName: "Patil Farms (Delhi)",
+    vendorName: "Patil Farms",
     latitude: 28.6139, // New Delhi
     longitude: 77.2090, // New Delhi
     category: "Fruits",
@@ -52,14 +52,14 @@ const initialProducts: Product[] = [
   },
   {
     id: "2",
-    name: "Tomatoes",
-    description: "Vibrant and flavorful tomatoes, ideal for salads and gourmet dishes.",
+    name: "Heirloom Tomatoes",
+    description: "Vibrant and flavorful heirloom tomatoes, ideal for salads and gourmet dishes.",
     price: 90.00,
     quantityUnit: "per kg",
     imageUrl: "/tomato.jpg",
     minOrderQuantity: 0.5,
     availableQuantity: 30,
-    vendorName: "Gupta Farm Produce (Mumbai)",
+    vendorName: "Gupta Farm Produce",
     latitude: 19.0760, // Mumbai
     longitude: 72.8777, // Mumbai
     category: "Vegetables",
@@ -74,7 +74,7 @@ const initialProducts: Product[] = [
     imageUrl: "/spinach.jpg",
     minOrderQuantity: 1,
     availableQuantity: 100,
-    vendorName: "Ecogrow (Bengaluru)",
+    vendorName: "Ecogrow",
     latitude: 12.9716, // Bengaluru
     longitude: 77.5946, // Bengaluru
     category: "Leafy Greens",
@@ -82,14 +82,14 @@ const initialProducts: Product[] = [
   },
   {
     id: "4",
-    name: "Potatoes",
-    description: "Versatile potatoes, perfect for roasting or mashing.",
+    name: "Sweet Potatoes",
+    description: "Naturally sweet and versatile sweet potatoes, perfect for roasting or mashing.",
     price: 90.00,
     quantityUnit: "per kg",
     imageUrl: "/potato.jpg",
     minOrderQuantity: 2,
     availableQuantity: 80,
-    vendorName: "Farm Fresh Co. (Chennai)",
+    vendorName: "Farm Fresh Co.",
     latitude: 13.0827, // Chennai
     longitude: 80.2707, // Chennai
     category: "Vegetables",
@@ -104,7 +104,7 @@ const initialProducts: Product[] = [
     imageUrl: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwYmFuYW5hc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
     minOrderQuantity: 1,
     availableQuantity: 60,
-    vendorName: "Tropical Delights (Kolkata)",
+    vendorName: "Tropical Delights",
     latitude: 22.5726, // Kolkata
     longitude: 88.3639, // Kolkata
     category: "Fruits",
@@ -119,7 +119,7 @@ const initialProducts: Product[] = [
     imageUrl: "/oranges.jpg",
     minOrderQuantity: 1,
     availableQuantity: 45,
-    vendorName: "Citrus Grove (Hyderabad)",
+    vendorName: "Citrus Grove",
     latitude: 17.3850, // Hyderabad
     longitude: 78.4867, // Hyderabad
     category: "Fruits",
@@ -134,7 +134,7 @@ const initialProducts: Product[] = [
     imageUrl: "/karela.jpg",
     minOrderQuantity: 0.5,
     availableQuantity: 35,
-    vendorName: "Healthy Bites (Jaipur)",
+    vendorName: "Healthy Bites",
     latitude: 26.9124, // Jaipur
     longitude: 75.7873, // Jaipur
     category: "Vegetables",
@@ -149,7 +149,7 @@ const initialProducts: Product[] = [
     imageUrl: "/garlic.jpg",
     minOrderQuantity: 0.25,
     availableQuantity: 60,
-    vendorName: "Spice Route (Ahmedabad)",
+    vendorName: "Spice Route",
     latitude: 23.0225, // Ahmedabad
     longitude: 72.5714, // Ahmedabad
     category: "Spices",
@@ -164,7 +164,7 @@ const initialProducts: Product[] = [
     imageUrl: "https://images.unsplash.com/photo-1590005354167-6dafe5cdace5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxjYWJiYWdlfGVufDB8fHx8MTcxOTk0NjY1N3ww&ixlib=rb-4.0.3&q=80&w=1080",
     minOrderQuantity: 1,
     availableQuantity: 70,
-    vendorName: "Green Fields (Pune)",
+    vendorName: "Green Fields",
     latitude: 18.5204, // Pune
     longitude: 73.8567, // Pune
     category: "Vegetables",
@@ -179,7 +179,7 @@ const initialProducts: Product[] = [
     imageUrl: "https://images.unsplash.com/photo-1518843875456-df49b7921538?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxiZWxsJTIwcGVwcGVyc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
     minOrderQuantity: 0.5,
     availableQuantity: 40,
-    vendorName: "Rainbow Harvest (Lucknow)",
+    vendorName: "Rainbow Harvest",
     latitude: 26.8467, // Lucknow
     longitude: 80.9462, // Lucknow
     category: "Vegetables",
@@ -196,13 +196,7 @@ const ClientDashboard = () => {
   const [isProductPreviewOpen, setIsProductPreviewOpen] = useState(false);
   const [showMapView, setShowMapView] = useState(false); // State to toggle between list and map view
   // Initialize userLocation with a default value
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number }>({ lat: 28.6139, lng: 77.2090 }); // Default to New Delhi
-
-  // Filter states
-  const [categoryFilter, setCategoryFilter] = useState<string>("All");
-  const [vendorRatingFilter, setVendorRatingFilter] = useState<number>(0); // Min rating
-  const [priceRangeFilter, setPriceRangeFilter] = useState<[number, number]>([0, 500]); // [min, max]
-  const [deliveryLocationFilter, setDeliveryLocationFilter] = useState<string>(""); // For future use with geocoding
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number }>({ lat: 22.3511148, lng: 78.6677428 }); // Default to center of India
 
   // Get user's current location
   useEffect(() => {
@@ -225,6 +219,12 @@ const ClientDashboard = () => {
       // userLocation already has a default.
     }
   }, []);
+
+  // Filter states
+  const [categoryFilter, setCategoryFilter] = useState<string>("All");
+  const [vendorRatingFilter, setVendorRatingFilter] = useState<number>(0); // Min rating
+  const [priceRangeFilter, setPriceRangeFilter] = useState<[number, number]>([0, 500]); // [min, max]
+  const [deliveryLocationFilter, setDeliveryLocationFilter] = useState<string>(""); // For future use with geocoding
 
   // Apply filters whenever filter states or products change
   useEffect(() => {
