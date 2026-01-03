@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import * as ReactMapGL from "react-map-gl"; // Changed to namespace import
+import MapGL, { Marker, Popup } from "react-map-gl"; // Changed import style
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Product } from "@/data/dummyProducts";
 import { MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button"; // Added missing import for Button
 
 interface ProductMapProps {
   products: Product[];
@@ -24,13 +25,13 @@ const ProductMap: React.FC<ProductMapProps> = ({ products, onProductClick }) => 
 
   const mapRef = useRef<any>(null);
 
-  const handleViewportChange = (event: ReactMapGL.ViewStateChangeEvent) => { // Use ReactMapGL.ViewStateChangeEvent
+  const handleViewportChange = (event: MapGL.ViewStateChangeEvent) => { // Use MapGL.ViewStateChangeEvent
     setViewport(event.viewState);
   };
 
   return (
     <div className="w-full h-[600px] rounded-lg overflow-hidden shadow-lg">
-      <ReactMapGL.Map // Use ReactMapGL.Map
+      <MapGL.Map // Use MapGL.Map
         ref={mapRef}
         mapboxAccessToken={MAPTILER_API_KEY} // MapTiler uses Mapbox GL JS, so this prop is used for the key
         initialViewState={viewport}
@@ -40,7 +41,7 @@ const ProductMap: React.FC<ProductMapProps> = ({ products, onProductClick }) => 
       >
         {products.map((product) => (
           product.latitude && product.longitude && (
-            <ReactMapGL.Marker // Use ReactMapGL.Marker
+            <MapGL.Marker // Use MapGL.Marker
               key={product.id}
               latitude={product.latitude}
               longitude={product.longitude}
@@ -51,12 +52,12 @@ const ProductMap: React.FC<ProductMapProps> = ({ products, onProductClick }) => 
               }}
             >
               <MapPin className="h-8 w-8 text-green-600 cursor-pointer" />
-            </ReactMapGL.Marker>
+            </MapGL.Marker>
           )
         ))}
 
         {popupInfo && (
-          <ReactMapGL.Popup // Use ReactMapGL.Popup
+          <MapGL.Popup // Use MapGL.Popup
             anchor="top"
             latitude={popupInfo.latitude!}
             longitude={popupInfo.longitude!}
@@ -83,9 +84,9 @@ const ProductMap: React.FC<ProductMapProps> = ({ products, onProductClick }) => 
                 View Details
               </Button>
             </div>
-          </ReactMapGL.Popup>
+          </MapGL.Popup>
         )}
-      </ReactMapGL.Map>
+      </MapGL.Map>
     </div>
   );
 };
