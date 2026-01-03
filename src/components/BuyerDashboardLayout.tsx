@@ -50,11 +50,11 @@ const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({
   setCategoryFilter,
   vendorRatingFilter,
   setVendorRatingFilter,
-  priceRangeFilter,
+  priceRangeFilter = [0, 500], // Added default value here
   setPriceRangeFilter,
   deliveryLocationFilter,
   setDeliveryLocationFilter,
-  availableCategories = [], // Re-added default empty array here to fix the 'map' error
+  availableCategories = [], 
   userLocation, // Destructure new prop
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
