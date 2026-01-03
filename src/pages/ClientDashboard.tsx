@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ClientProductListings from "@/components/ClientProductListings";
@@ -27,7 +27,7 @@ interface CartItem {
   orderedQuantity: number;
 }
 
-const dummyProducts: Product[] = [
+const initialProducts: Product[] = [
   {
     id: "1",
     name: "Organic Apples",
@@ -119,10 +119,37 @@ const dummyProducts: Product[] = [
 ];
 
 const ClientDashboard = () => {
+  const [products, setProducts] = useState<Product[]>(initialProducts);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(dummyProducts);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductPreviewOpen, setIsProductPreviewOpen] = useState(false);
+
+  // Initialize filtered products when component mounts or products change
+  useEffect(() => {
+    setFilteredProducts(products);
+  }, [products]);
+
+  // Dynamic price update logic
+  useEffect(() => {
+    const updateProductPrices = () => {
+      setProducts((prevProducts) =>
+        prevProducts.map((product) => {
+          const priceChange = (Math.random() * 20) - 10; // Random change between -10 and +10
+          let newPrice = product.price + priceChange;
+          
+          // Ensure price doesn't go below a minimum (e.g., 1 Rs)
+          newPrice = Math.max(1, newPrice); 
+          
+          return { ...product, price: parseFloat(newPrice.toFixed(2)) };
+        })
+      );
+    };
+
+    const intervalId = setInterval(updateProductPrices, 20000); // Update every 20 seconds
+
+    return () => clearInterval(intervalId); // Cleanup on component unmount
+  }, []); // Empty dependency array means this runs once on mount and cleans up on unmount
 
   const handleAddToCart = (product: Product, quantity: number) => {
     setCartItems((prevItems) => {
@@ -140,11 +167,11 @@ const ClientDashboard = () => {
 
   const handleSearch = (query: string) => {
     if (!query) {
-      setFilteredProducts(dummyProducts);
+      setFilteredProducts(products); // Use the dynamically updated products
       return;
     }
     const lowerCaseQuery = query.toLowerCase();
-    const results = dummyProducts.filter(
+    const results = products.filter( // Filter from the dynamically updated products
       (product) =>
         product.name.toLowerCase().includes(lowerCaseQuery) ||
         product.vendorName.toLowerCase().includes(lowerCaseQuery)
