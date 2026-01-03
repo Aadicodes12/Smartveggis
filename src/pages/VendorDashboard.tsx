@@ -12,6 +12,7 @@ const dummyProducts = [
     description: "Freshly picked organic apples, sweet and crisp. Perfect for snacking or baking.",
     price: 120.00,
     imageUrl: "/apple.jpg",
+    quantityUnit: "per kg",
   },
   {
     id: "2",
@@ -19,6 +20,7 @@ const dummyProducts = [
     description: "Vibrant and flavorful heirloom tomatoes, ideal for salads and gourmet dishes.",
     price: 90.00,
     imageUrl: "/tomato.jpg",
+    quantityUnit: "per kg",
   },
   {
     id: "3",
@@ -26,6 +28,7 @@ const dummyProducts = [
     description: "Nutrient-rich fresh spinach, great for smoothies, salads, or sautéing.",
     price: 60.00,
     imageUrl: "/spinach.jpg",
+    quantityUnit: "per bunch",
   },
   {
     id: "4",
@@ -33,13 +36,15 @@ const dummyProducts = [
     description: "Naturally sweet and versatile sweet potatoes, perfect for roasting or mashing.",
     price: 90.00,
     imageUrl: "/potato.jpg",
+    quantityUnit: "per kg",
   },
   {
     id: "5",
     name: "Organic Bananas",
     description: "Ripe organic bananas, a healthy and convenient snack.",
     price: 70.00,
-    imageUrl: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwYmFuYW5hc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&lib=rb-4.0.3&q=80&w=1080",
+    imageUrl: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwYmFuYW5hc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
+    quantityUnit: "per dozen",
   },
   {
     id: "9",
@@ -47,6 +52,7 @@ const dummyProducts = [
     description: "Juicy and sweet oranges, perfect for a healthy snack or fresh juice.",
     price: 100.00,
     imageUrl: "/oranges.jpg",
+    quantityUnit: "per kg",
   },
   {
     id: "10",
@@ -54,6 +60,7 @@ const dummyProducts = [
     description: "Fresh bitter gourd, known for its health benefits and unique taste.",
     price: 70.00,
     imageUrl: "/karela.jpg",
+    quantityUnit: "per kg",
   },
   {
     id: "11",
@@ -61,6 +68,7 @@ const dummyProducts = [
     description: "Pungent and flavorful garlic, essential for many cuisines.",
     price: 120.00,
     imageUrl: "/garlic.jpg",
+    quantityUnit: "per 250g",
   },
 ];
 
@@ -74,9 +82,11 @@ const VendorDashboard = () => {
         </p>
         
         <div className="flex justify-center mb-8">
-          <Button className="px-6 py-3 text-lg bg-green-600 hover:bg-green-700 text-white shadow-lg transform transition-transform hover:scale-105">
-            Add New Product
-          </Button>
+          <Link to="/vendor-add-product"> {/* Updated Link */}
+            <Button className="px-6 py-3 text-lg bg-green-600 hover:bg-green-700 text-white shadow-lg transform transition-transform hover:scale-105">
+              Add New Product
+            </Button>
+          </Link>
         </div>
 
         <h2 className="text-3xl font-semibold mb-6 text-gray-800 dark:text-gray-100 text-center">Your Listed Products</h2>
