@@ -24,7 +24,6 @@ const EditProductPage = () => {
   const [availableQuantity, setAvailableQuantity] = useState<number | string>("");
   const [latitude, setLatitude] = useState<number | string>("");
   const [longitude, setLongitude] = useState<number | string>("");
-  const [city, setCity] = useState(""); // New state for city
 
   useEffect(() => {
     if (productId) {
@@ -40,7 +39,6 @@ const EditProductPage = () => {
         setAvailableQuantity(foundProduct.availableQuantity);
         setLatitude(foundProduct.latitude || "");
         setLongitude(foundProduct.longitude || "");
-        setCity(foundProduct.city || ""); // Set city from product data
       } else {
         toast.error("Product not found.");
         navigate("/vendor-dashboard");
@@ -53,7 +51,7 @@ const EditProductPage = () => {
 
     if (!product) return;
 
-    if (!productName || !description || !price || !quantityUnit || !imageUrl || !minOrderQuantity || !availableQuantity || !latitude || !longitude || !city) {
+    if (!productName || !description || !price || !quantityUnit || !imageUrl || !minOrderQuantity || !availableQuantity || !latitude || !longitude) {
       toast.error("Please fill in all fields.");
       return;
     }
@@ -94,7 +92,6 @@ const EditProductPage = () => {
       availableQuantity: Number(availableQuantity),
       latitude: Number(latitude),
       longitude: Number(longitude),
-      city, // Include city
     };
 
     console.log("Updated product:", updatedProduct);
@@ -205,7 +202,7 @@ const EditProductPage = () => {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4"> {/* Changed to 3 columns */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="latitude">Latitude</Label>
                 <Input
@@ -227,17 +224,6 @@ const EditProductPage = () => {
                   placeholder="e.g., 77.2090"
                   value={longitude}
                   onChange={(e) => setLongitude(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="grid gap-2"> {/* New city input */}
-                <Label htmlFor="city">City</Label>
-                <Input
-                  id="city"
-                  type="text"
-                  placeholder="e.g., Delhi"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
                   required
                 />
               </div>

@@ -6,9 +6,7 @@ import { Button } from "@/components/ui/button";
 import ClientProductListings from "@/components/ClientProductListings";
 import BuyerDashboardLayout from "@/components/BuyerDashboardLayout";
 import ProductPreviewDialog from "@/components/ProductPreviewDialog";
-import ProductMap from "@/components/ProductMap"; // Import the new map component
 import { Product, dummyProducts } from "@/data/dummyProducts"; // Import from new centralized file
-import { List, Map as MapIcon } from "lucide-react"; // Import icons for toggle
 
 interface CartItem {
   id: string;
@@ -25,7 +23,6 @@ const ClientDashboard = () => {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(initialProducts);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductPreviewOpen, setIsProductPreviewOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<"list" | "map">("list"); // New state for view mode
 
   const handleAddToCart = (product: Product, quantity: number) => {
     setCartItems((prevItems) => {
@@ -54,8 +51,7 @@ const ClientDashboard = () => {
     const results = initialProducts.filter(
       (product) =>
         product.name.toLowerCase().includes(lowerCaseQuery) ||
-        product.vendorName.toLowerCase().includes(lowerCaseQuery) ||
-        (product.city && product.city.toLowerCase().includes(lowerCaseQuery)) // Search by city
+        product.vendorName.toLowerCase().includes(lowerCaseQuery)
     );
     setFilteredProducts(results);
   };
@@ -80,40 +76,16 @@ const ClientDashboard = () => {
         
         <div className="flex justify-between items-center mb-6 px-4">
           <div className="flex gap-2">
-            <Button 
-              variant={viewMode === "list" ? "default" : "outline"} 
-              size="sm"
-              onClick={() => setViewMode("list")}
-              className={viewMode === "list" ? "bg-green-600 hover:bg-green-700 text-white" : "border-green-600 text-green-600 hover:bg-green-50 dark:border-green-400 dark:text-green-400 dark:hover:bg-gray-700"}
-            >
-              <List className="h-4 w-4 mr-2" /> List View
-            </Button>
-            <Button 
-              variant={viewMode === "map" ? "default" : "outline"} 
-              size="sm"
-              onClick={() => setViewMode("map")}
-              className={viewMode === "map" ? "bg-green-600 hover:bg-green-700 text-white" : "border-green-600 text-green-600 hover:bg-green-50 dark:border-green-400 dark:text-green-400 dark:hover:bg-gray-700"}
-            >
-              <MapIcon className="h-4 w-4 mr-2" /> Map View
-            </Button>
           </div>
           <div>
-            {/* Sorting options can go here */}
           </div>
         </div>
 
-        {viewMode === "list" ? (
-          <ClientProductListings 
-            products={filteredProducts} 
-            onAddToCart={handleAddToCart} 
-            onProductClick={handleProductClick} 
-          />
-        ) : (
-          <ProductMap 
-            products={filteredProducts} 
-            onProductClick={handleProductClick} 
-          />
-        )}
+        <ClientProductListings 
+          products={filteredProducts} 
+          onAddToCart={handleAddToCart} 
+          onProductClick={handleProductClick} 
+        />
 
         <div className="mt-12 text-center">
           <Link to="/">

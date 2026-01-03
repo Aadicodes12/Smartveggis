@@ -18,15 +18,14 @@ const AddProductPage = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [minOrderQuantity, setMinOrderQuantity] = useState<number | string>("");
   const [availableQuantity, setAvailableQuantity] = useState<number | string>("");
-  const [latitude, setLatitude] = useState<number | string>("");
-  const [longitude, setLongitude] = useState<number | string>("");
-  const [city, setCity] = useState(""); // New state for city
+  const [latitude, setLatitude] = useState<number | string>(""); // New state for latitude
+  const [longitude, setLongitude] = useState<number | string>(""); // New state for longitude
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     // Basic validation
-    if (!productName || !description || !price || !quantityUnit || !imageUrl || !minOrderQuantity || !availableQuantity || !latitude || !longitude || !city) {
+    if (!productName || !description || !price || !quantityUnit || !imageUrl || !minOrderQuantity || !availableQuantity || !latitude || !longitude) {
       toast.error("Please fill in all fields.");
       return;
     }
@@ -66,9 +65,8 @@ const AddProductPage = () => {
       minOrderQuantity: Number(minOrderQuantity),
       availableQuantity: Number(availableQuantity),
       vendorName: "Your Vendor Name", // Placeholder, would be dynamic in a real app
-      latitude: Number(latitude),
-      longitude: Number(longitude),
-      city, // Include city
+      latitude: Number(latitude), // Include latitude
+      longitude: Number(longitude), // Include longitude
     };
 
     console.log("New product added:", newProduct);
@@ -173,7 +171,7 @@ const AddProductPage = () => {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4"> {/* Changed to 3 columns */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="latitude">Latitude</Label>
                 <Input
@@ -195,17 +193,6 @@ const AddProductPage = () => {
                   placeholder="e.g., 77.2090"
                   value={longitude}
                   onChange={(e) => setLongitude(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="grid gap-2"> {/* New city input */}
-                <Label htmlFor="city">City</Label>
-                <Input
-                  id="city"
-                  type="text"
-                  placeholder="e.g., Delhi"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
                   required
                 />
               </div>
