@@ -23,9 +23,10 @@ interface Product {
 interface ProductCardProps {
   product: Product;
   onAddToCart: (product: Product, quantity: number) => void;
+  onProductClick: (product: Product) => void; // New prop for opening preview
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onProductClick }) => {
   const [desiredQuantity, setDesiredQuantity] = useState<number>(product.minOrderQuantity);
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +36,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
     }
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click from firing when button is clicked
     if (desiredQuantity < product.minOrderQuantity) {
       toast.error(`Minimum order quantity for ${product.name} is ${product.minOrderQuantity} ${product.quantityUnit}.`);
       return;
@@ -54,7 +56,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   };
 
   return (
-    <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg">
+    <Card 
+      className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg cursor-pointer"
+      onClick={() => onProductClick(product)} // Make the card clickable
+    >
       <img src={product.imageUrl} alt={product.name} className="w-full h-48 object-cover" />
       <CardHeader className="p-4 pb-2">
         <CardTitle className="text-xl font-semibold text-gray-800 dark:text-gray-100">{product.name}</CardTitle>
@@ -82,6 +87,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
             min={product.minOrderQuantity}
             value={desiredQuantity}
             onChange={handleQuantityChange}
+            onClick={(e) => e.stopPropagation()} // Prevent card click when interacting with input
             className="w-24 text-center"
           />
           <span className="text-sm text-gray-600 dark:text-gray-300">{product.quantityUnit}</span>

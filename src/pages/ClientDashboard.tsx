@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ClientProductListings from "@/components/ClientProductListings";
-import BuyerDashboardLayout from "@/components/BuyerDashboardLayout"; // Import the new layout
+import BuyerDashboardLayout from "@/components/BuyerDashboardLayout";
+import ProductPreviewDialog from "@/components/ProductPreviewDialog"; // Import the new dialog component
 
 interface Product {
   id: string;
@@ -120,6 +121,8 @@ const dummyProducts: Product[] = [
 const ClientDashboard = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(dummyProducts);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isProductPreviewOpen, setIsProductPreviewOpen] = useState(false);
 
   const handleAddToCart = (product: Product, quantity: number) => {
     setCartItems((prevItems) => {
@@ -149,6 +152,16 @@ const ClientDashboard = () => {
     setFilteredProducts(results);
   };
 
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+    setIsProductPreviewOpen(true);
+  };
+
+  const handleCloseProductPreview = () => {
+    setIsProductPreviewOpen(false);
+    setSelectedProduct(null);
+  };
+
   return (
     <BuyerDashboardLayout cartItems={cartItems} onSearch={handleSearch}>
       <div className="w-full max-w-6xl mx-auto py-4">
@@ -175,7 +188,11 @@ const ClientDashboard = () => {
           </div>
         </div>
 
-        <ClientProductListings products={filteredProducts} onAddToCart={handleAddToCart} />
+        <ClientProductListings 
+          products={filteredProducts} 
+          onAddToCart={handleAddToCart} 
+          onProductClick={handleProductClick} // Pass the new handler
+        />
 
         <div className="mt-12 text-center">
           <Link to="/">
@@ -185,6 +202,13 @@ const ClientDashboard = () => {
           </Link>
         </div>
       </div>
+
+      <ProductPreviewDialog
+        product={selectedProduct}
+        isOpen={isProductPreviewOpen}
+        onClose={handleCloseProductPreview}
+        onAddToCart={handleAddToCart}
+      />
     </BuyerDashboardLayout>
   );
 };
