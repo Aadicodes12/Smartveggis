@@ -17,6 +17,8 @@ interface Product {
   minOrderQuantity: number;
   availableQuantity: number;
   vendorName: string;
+  latitude?: number; // Add latitude for geospatial data
+  longitude?: number; // Add longitude for geospatial data
 }
 
 interface CartItem {
@@ -32,23 +34,27 @@ const initialProducts: Product[] = [
     id: "1",
     name: "Organic Apples",
     description: "Freshly picked organic apples, sweet and crisp. Perfect for snacking or baking.",
-    price: 120.00, // Adjusted price
+    price: 120.00,
     quantityUnit: "per kg",
     imageUrl: "/apple.jpg",
     minOrderQuantity: 1,
     availableQuantity: 50,
     vendorName: "Green Farms",
+    latitude: 28.7041, // Example latitude
+    longitude: 77.1025, // Example longitude
   },
   {
     id: "2",
     name: "Heirloom Tomatoes",
     description: "Vibrant and flavorful heirloom tomatoes, ideal for salads and gourmet dishes.",
-    price: 90.00, // Adjusted price
+    price: 90.00,
     quantityUnit: "per kg",
     imageUrl: "/tomato.jpg",
     minOrderQuantity: 0.5,
     availableQuantity: 30,
     vendorName: "Sunny Fields",
+    latitude: 28.6139,
+    longitude: 77.2090,
   },
   {
     id: "3",
@@ -60,6 +66,8 @@ const initialProducts: Product[] = [
     minOrderQuantity: 1,
     availableQuantity: 100,
     vendorName: "Organic Harvest",
+    latitude: 28.5355,
+    longitude: 77.3910,
   },
   {
     id: "4",
@@ -71,6 +79,8 @@ const initialProducts: Product[] = [
     minOrderQuantity: 2,
     availableQuantity: 80,
     vendorName: "Farm Fresh Co.",
+    latitude: 28.4595,
+    longitude: 77.0266,
   },
   {
     id: "5",
@@ -82,6 +92,8 @@ const initialProducts: Product[] = [
     minOrderQuantity: 1,
     availableQuantity: 60,
     vendorName: "Tropical Delights",
+    latitude: 28.7041,
+    longitude: 77.1025,
   },
   {
     id: "9",
@@ -93,6 +105,8 @@ const initialProducts: Product[] = [
     minOrderQuantity: 1,
     availableQuantity: 45,
     vendorName: "Citrus Grove",
+    latitude: 28.6139,
+    longitude: 77.2090,
   },
   {
     id: "10",
@@ -104,6 +118,8 @@ const initialProducts: Product[] = [
     minOrderQuantity: 0.5,
     availableQuantity: 35,
     vendorName: "Healthy Bites",
+    latitude: 28.5355,
+    longitude: 77.3910,
   },
   {
     id: "11",
@@ -115,6 +131,8 @@ const initialProducts: Product[] = [
     minOrderQuantity: 0.25,
     availableQuantity: 60,
     vendorName: "Spice Route",
+    latitude: 28.4595,
+    longitude: 77.0266,
   },
 ];
 
@@ -129,27 +147,6 @@ const ClientDashboard = () => {
   useEffect(() => {
     setFilteredProducts(products);
   }, [products]);
-
-  // Dynamic price update logic
-  useEffect(() => {
-    const updateProductPrices = () => {
-      setProducts((prevProducts) =>
-        prevProducts.map((product) => {
-          const priceChange = (Math.random() * 20) - 10; // Random change between -10 and +10
-          let newPrice = product.price + priceChange;
-          
-          // Ensure price doesn't go below a minimum (e.g., 1 Rs)
-          newPrice = Math.max(1, newPrice); 
-          
-          return { ...product, price: parseFloat(newPrice.toFixed(2)) };
-        })
-      );
-    };
-
-    const intervalId = setInterval(updateProductPrices, 20000); // Update every 20 seconds
-
-    return () => clearInterval(intervalId); // Cleanup on component unmount
-  }, []); // Empty dependency array means this runs once on mount and cleans up on unmount
 
   const handleAddToCart = (product: Product, quantity: number) => {
     setCartItems((prevItems) => {
@@ -167,11 +164,11 @@ const ClientDashboard = () => {
 
   const handleSearch = (query: string) => {
     if (!query) {
-      setFilteredProducts(products); // Use the dynamically updated products
+      setFilteredProducts(products);
       return;
     }
     const lowerCaseQuery = query.toLowerCase();
-    const results = products.filter( // Filter from the dynamically updated products
+    const results = products.filter(
       (product) =>
         product.name.toLowerCase().includes(lowerCaseQuery) ||
         product.vendorName.toLowerCase().includes(lowerCaseQuery)
