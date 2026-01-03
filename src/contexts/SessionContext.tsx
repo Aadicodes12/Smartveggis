@@ -35,7 +35,6 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
   const fetchUserProfile = async (userId: string) => {
-    setIsLoading(true);
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
@@ -45,14 +44,12 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
     if (error) {
       console.error('Error fetching profile:', error);
       setProfile(null);
-      setIsLoading(false);
       return null;
     } else if (data) {
       setProfile(data as UserProfile);
-      setIsLoading(false);
       return data as UserProfile;
     }
-    setIsLoading(false); // Ensure loading is set to false even if no data/error
+    setProfile(null);
     return null;
   };
 
@@ -61,16 +58,17 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
       async (event, currentSession) => {
         setSession(currentSession);
         setUser(currentSession?.user || null);
-        setIsLoading(true);
+        setIsLoading(true); // Start loading when auth state changes
 
         let fetchedProfile: UserProfile | null = null;
         if (currentSession?.user) {
           fetchedProfile = await fetchUserProfile(currentSession.user.id);
         } else {
-          setProfile(null);
-          setIsLoading(false);
+          setProfile(null); // Clear profile if no user
         }
         
+        setIsLoading(false); // End loading after profile is potentially fetched/cleared
+
         if (event === 'SIGNED_IN') {
           if (fetchedProfile?.role === 'vendor') {
             navigate('/vendor-dashboard');
@@ -89,17 +87,20 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
     supabase.auth.getSession().then(async ({ data: { session: initialSession } }) => {
       setSession(initialSession);
       setUser(initialSession?.user || null);
+      setIsLoading(true); // Start loading for initial check
+
       if (initialSession?.user) {
         await fetchUserProfile(initialSession.user.id);
       } else {
-        setIsLoading(false);
+        setProfile(null); // Clear profile if no initial user
       }
+      setIsLoading(false); // End loading for initial check
     });
 
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, [navigate]); // Removed profile?.role from dependencies
+  }, [navigate]);
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
