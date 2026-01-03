@@ -45,10 +45,15 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
     if (error) {
       console.error('Error fetching profile:', error);
       setProfile(null);
+      setIsLoading(false);
+      return null;
     } else if (data) {
       setProfile(data as UserProfile);
+      setIsLoading(false);
+      return data as UserProfile;
     }
-    setIsLoading(false);
+    setIsLoading(false); // Ensure loading is set to false even if no data/error
+    return null;
   };
 
   useEffect(() => {
@@ -58,19 +63,18 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
         setUser(currentSession?.user || null);
         setIsLoading(true);
 
+        let fetchedProfile: UserProfile | null = null;
         if (currentSession?.user) {
-          await fetchUserProfile(currentSession.user.id);
+          fetchedProfile = await fetchUserProfile(currentSession.user.id);
         } else {
           setProfile(null);
+          setIsLoading(false);
         }
-        setIsLoading(false);
-
+        
         if (event === 'SIGNED_IN') {
-          // Redirect based on role after sign-in
-          if (profile?.role === 'vendor') {
+          if (fetchedProfile?.role === 'vendor') {
             navigate('/vendor-dashboard');
           } else {
-            // Default to client dashboard or if role is not set
             navigate('/client-dashboard');
           }
           toast.success('Logged in successfully!');
@@ -82,19 +86,20 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
     );
 
     // Initial session check
-    supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
+    supabase.auth.getSession().then(async ({ data: { session: initialSession } }) => {
       setSession(initialSession);
       setUser(initialSession?.user || null);
       if (initialSession?.user) {
-        fetchUserProfile(initialSession.user.id);
+        await fetchUserProfile(initialSession.user.id);
+      } else {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     });
 
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, [navigate, profile?.role]); // Added profile.role to dependency array to react to role changes
+  }, [navigate]); // Removed profile?.role from dependencies
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
