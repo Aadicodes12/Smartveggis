@@ -38,7 +38,7 @@ interface BuyerDashboardLayoutProps {
   deliveryLocationFilter: string;
   setDeliveryLocationFilter: (location: string) => void;
   availableCategories: string[];
-  userLocation: { lat: number; lng: number } | null; // New prop for user's location
+  // userLocation: { lat: number; lng: number } | null; // Removed userLocation prop
 }
 
 const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({
@@ -50,12 +50,12 @@ const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({
   setCategoryFilter,
   vendorRatingFilter,
   setVendorRatingFilter,
-  priceRangeFilter = [0, 500], // Added default value here
+  priceRangeFilter = [0, 500], 
   setPriceRangeFilter,
   deliveryLocationFilter,
   setDeliveryLocationFilter,
   availableCategories = [], 
-  userLocation, // Destructure new prop
+  // userLocation, // Removed userLocation from destructuring
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const isMobile = useIsMobile();
@@ -161,9 +161,8 @@ const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({
             id="delivery-location-filter"
             type="text"
             placeholder="e.g., New Delhi"
-            value={userLocation ? t('your_current_location') : deliveryLocationFilter}
+            value={deliveryLocationFilter} // Removed conditional rendering for userLocation
             onChange={(e) => setDeliveryLocationFilter(e.target.value)}
-            readOnly={!!userLocation} // Make it read-only if userLocation is available
             className="w-full"
           />
         </div>

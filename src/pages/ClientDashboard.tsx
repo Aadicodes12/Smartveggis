@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import ClientProductListings from "@/components/ClientProductListings";
 import BuyerDashboardLayout from "@/components/BuyerDashboardLayout";
 import ProductPreviewDialog from "@/components/ProductPreviewDialog";
-import VendorMap from "@/components/VendorMap"; // Import the new map component
+// import VendorMap from "@/components/VendorMap"; // Removed VendorMap import
 import { useSupabase } from "@/contexts/SupabaseContext";
 import { toast } from "sonner";
 
@@ -194,31 +194,28 @@ const ClientDashboard = () => {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductPreviewOpen, setIsProductPreviewOpen] = useState(false);
-  const [showMapView, setShowMapView] = useState(false); // State to toggle between list and map view
-  // Initialize userLocation with a default value
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number }>({ lat: 22.3511148, lng: 78.6677428 }); // Default to center of India
+  // const [showMapView, setShowMapView] = useState(false); // Removed state to toggle between list and map view
+  // const [userLocation, setUserLocation] = useState<{ lat: number; lng: number }>({ lat: 22.3511148, lng: 78.6677428 }); // Removed userLocation state
 
-  // Get user's current location
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-        },
-        (error) => {
-          console.error("Error getting user location:", error);
-          toast.error("Could not retrieve your location. Showing all vendors at a default location.");
-          // userLocation already has a default, so no need to set it again here.
-        }
-      );
-    } else {
-      toast.info("Geolocation is not supported by your browser. Showing all vendors at a default location.");
-      // userLocation already has a default.
-    }
-  }, []);
+  // Removed useEffect for geolocation
+  // useEffect(() => {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         setUserLocation({
+  //           lat: position.coords.latitude,
+  //           lng: position.coords.longitude,
+  //         });
+  //       },
+  //       (error) => {
+  //         console.error("Error getting user location:", error);
+  //         toast.error("Could not retrieve your location. Showing all vendors at a default location.");
+  //       }
+  //     );
+  //   } else {
+  //     toast.info("Geolocation is not supported by your browser. Showing all vendors at a default location.");
+  //   }
+  // }, []);
 
   // Filter states
   const [categoryFilter, setCategoryFilter] = useState<string>("All");
@@ -229,11 +226,6 @@ const ClientDashboard = () => {
   // Apply filters whenever filter states or products change
   useEffect(() => {
     let currentFilteredProducts = products;
-
-    // Apply search query filter (from BuyerDashboardLayout)
-    // This will be handled by the onSearch prop, which updates filteredProducts directly.
-    // So, we need to ensure the search query is also applied here if it's a persistent filter.
-    // For now, let's assume onSearch updates filteredProducts, and these filters refine that.
 
     // Category filter
     if (categoryFilter !== "All") {
@@ -253,8 +245,6 @@ const ClientDashboard = () => {
     );
 
     // Delivery Location filter (placeholder for future implementation with actual location data)
-    // For now, this filter will not actively filter products based on location,
-    // but the map will show nearby vendors based on userLocation.
     if (deliveryLocationFilter) {
       // This would involve more complex geospatial queries or client-side distance calculations
       // For now, it's a visual indicator on the map.
@@ -342,7 +332,7 @@ const ClientDashboard = () => {
       deliveryLocationFilter={deliveryLocationFilter}
       setDeliveryLocationFilter={setDeliveryLocationFilter}
       availableCategories={availableCategories}
-      userLocation={userLocation} // Pass userLocation to BuyerDashboardLayout
+      // userLocation={userLocation} // Removed userLocation prop
     >
       <div className="w-full max-w-6xl mx-auto py-4">
         <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">Available Products</h1>
@@ -350,7 +340,8 @@ const ClientDashboard = () => {
           Explore fresh fruits and vegetables from local vendors.
         </p>
         
-        <div className="flex justify-center gap-4 mb-6 px-4">
+        {/* Removed map view toggle buttons */}
+        {/* <div className="flex justify-center gap-4 mb-6 px-4">
           <Button
             variant={!showMapView ? "default" : "outline"}
             onClick={() => setShowMapView(false)}
@@ -365,17 +356,14 @@ const ClientDashboard = () => {
           >
             View on Map
           </Button>
-        </div>
+        </div> */}
 
-        {showMapView ? (
-          <VendorMap products={filteredProducts} userLocation={userLocation} />
-        ) : (
-          <ClientProductListings 
-            products={filteredProducts} 
-            onAddToCart={handleAddToCart} 
-            onProductClick={handleProductClick} 
-          />
-        )}
+        {/* Always render ClientProductListings */}
+        <ClientProductListings 
+          products={filteredProducts} 
+          onAddToCart={handleAddToCart} 
+          onProductClick={handleProductClick} 
+        />
 
         <div className="mt-12 text-center">
           <Link to="/">
