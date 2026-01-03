@@ -28,7 +28,7 @@ const translations = {
     notifications: "Notifications",
     profile: "Profile",
     login_title: "Sign In / Sign Up",
-    login_description: "Enter your email and password to access your account.",
+    login_description: "Enter your email and password to sign in or create a new account.",
     my_orders_title: "My Orders",
     my_orders_description: "View the status and details of your past and current orders.",
     order_history: "Order History",
