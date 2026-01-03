@@ -84,17 +84,6 @@ const dummyProducts: Product[] = [
     vendorName: "Tropical Delights",
   },
   {
-    id: "7",
-    name: "Fresh Carrots",
-    description: "Sweet and crunchy carrots, perfect for juicing, salads, or cooking.",
-    price: 80.00,
-    quantityUnit: "per kg",
-    imageUrl: "https://images.unsplash.com/photo-1529692236671-ac3369727154?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxjYXJyb3RzfGVufDB8fHx8MTcxOTk0NjY1OHww&ixlib=rb-4.0.3&q=80&w=1080",
-    minOrderQuantity: 1,
-    availableQuantity: 70,
-    vendorName: "Root Vegetables Inc.",
-  },
-  {
     id: "9",
     name: "Fresh Oranges",
     description: "Juicy and sweet oranges, perfect for a healthy snack or fresh juice.",
