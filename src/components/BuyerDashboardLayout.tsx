@@ -103,7 +103,7 @@ const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({ children, c
               </Sheet>
             )}
             <Link to="/client-dashboard" className="text-2xl font-bold text-green-700 dark:text-green-400">
-              Smartvegis Buyer Dashboard
+              Smartvegis
             </Link>
           </div>
 
