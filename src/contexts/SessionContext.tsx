@@ -3,7 +3,7 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } = "react-router-dom";
 import { toast } from 'sonner';
 
 interface SessionContextType {
@@ -31,7 +31,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // Start as true
   const navigate = useNavigate();
 
   const fetchUserProfile = async (userId: string) => {
@@ -49,52 +49,43 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
       setProfile(data as UserProfile);
       return data as UserProfile;
     }
-    setProfile(null);
+    setProfile(null); // Explicitly set to null if no data
     return null;
   };
 
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (event, currentSession) => {
-        setSession(currentSession);
-        setUser(currentSession?.user || null);
-        setIsLoading(true); // Start loading when auth state changes
+    const handleAuthChange = async (event: string, currentSession: Session | null) => {
+      setIsLoading(true); // Always set loading to true at the start of an auth change event
 
-        let fetchedProfile: UserProfile | null = null;
-        if (currentSession?.user) {
-          fetchedProfile = await fetchUserProfile(currentSession.user.id);
-        } else {
-          setProfile(null); // Clear profile if no user
-        }
-        
-        setIsLoading(false); // End loading after profile is potentially fetched/cleared
+      setSession(currentSession);
+      setUser(currentSession?.user || null);
+      setProfile(null); // Clear profile initially to avoid stale data
 
-        if (event === 'SIGNED_IN') {
-          if (fetchedProfile?.role === 'vendor') {
-            navigate('/vendor-dashboard');
-          } else {
-            navigate('/client-dashboard');
-          }
-          toast.success('Logged in successfully!');
-        } else if (event === 'SIGNED_OUT') {
-          navigate('/');
-          toast.info('Logged out.');
-        }
+      let fetchedProfile: UserProfile | null = null;
+      if (currentSession?.user) {
+        fetchedProfile = await fetchUserProfile(currentSession.user.id);
       }
-    );
+      
+      setIsLoading(false); // End loading after profile is potentially fetched/cleared
+
+      if (event === 'SIGNED_IN' || event === 'SIGNED_UP') {
+        if (fetchedProfile?.role === 'vendor') {
+          navigate('/vendor-dashboard');
+        } else {
+          navigate('/client-dashboard');
+        }
+        toast.success('Logged in successfully!');
+      } else if (event === 'SIGNED_OUT') {
+        navigate('/');
+        toast.info('Logged out.');
+      }
+    };
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(handleAuthChange);
 
     // Initial session check
     supabase.auth.getSession().then(async ({ data: { session: initialSession } }) => {
-      setSession(initialSession);
-      setUser(initialSession?.user || null);
-      setIsLoading(true); // Start loading for initial check
-
-      if (initialSession?.user) {
-        await fetchUserProfile(initialSession.user.id);
-      } else {
-        setProfile(null); // Clear profile if no initial user
-      }
-      setIsLoading(false); // End loading for initial check
+      await handleAuthChange('INITIAL_SESSION', initialSession); // Use the same handler for initial check
     });
 
     return () => {
