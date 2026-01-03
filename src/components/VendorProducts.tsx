@@ -11,6 +11,7 @@ interface Product {
   description: string;
   price: number;
   imageUrl: string;
+  quantityUnit?: string; // Make quantityUnit optional for now, or ensure it's always provided
 }
 
 interface VendorProductsProps {
@@ -43,7 +44,9 @@ const VendorProducts: React.FC<VendorProductsProps> = ({ products }) => {
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-grow flex flex-col justify-between p-4 pt-0">
-              <p className="text-lg font-bold text-green-700 dark:text-green-400 mb-4">₹{product.price.toFixed(2)}</p>
+              <p className="text-lg font-bold text-green-700 dark:text-green-400 mb-4">
+                ₹{product.price.toFixed(2)} {product.quantityUnit || "per kg"}
+              </p>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => handleEdit(product.id)} className="flex-1">
                   <Pencil className="h-4 w-4 mr-2" /> Edit

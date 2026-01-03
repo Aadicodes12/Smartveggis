@@ -49,13 +49,6 @@ const dummyProducts = [
     imageUrl: "https://images.unsplash.com/photo-1529692236671-ac3369727154?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxjYXJyb3RzfGVufDB8fHx8MTcxOTk0NjY1OHww&ixlib=rb-4.0.3&q=80&w=1080",
   },
   {
-    id: "8",
-    name: "Broccoli Florets",
-    description: "Healthy and fresh broccoli florets, ready to be steamed or stir-fried.",
-    price: 120.00,
-    imageUrl: "https://images.unsplash.com/photo-1587223962930-cb7f317f862c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxiaXJvY2NvbGl8ZW58MHx8fHwxNzE5OTQ2NjU4fDA&lib=rb-4.0.3&q=80&w=1080",
-  },
-  {
     id: "9",
     name: "Fresh Oranges",
     description: "Juicy and sweet oranges, perfect for a healthy snack or fresh juice.",
