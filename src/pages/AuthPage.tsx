@@ -158,7 +158,7 @@ const AuthPage = () => {
             localization={{
               variables: localization[language],
             }}
-            otp
+            // Removed 'otp' prop for simpler email/password flow
             phone
           />
         </CardContent>
