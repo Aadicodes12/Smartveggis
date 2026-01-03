@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ShoppingCart, X } from "lucide-react";
+import { ShoppingCart, X, MapPin } from "lucide-react"; // Import MapPin icon
 import { toast } from "sonner";
 import { Product } from "@/data/dummyProducts"; // Import from new centralized file
 
@@ -84,6 +84,11 @@ const ProductPreviewDialog: React.FC<ProductPreviewDialogProps> = ({ product, is
             <p className="text-md text-gray-500 dark:text-gray-400">
               <span className="font-semibold">Vendor:</span> {product.vendorName}
             </p>
+            {product.city && (
+              <div className="flex items-center text-md text-gray-500 dark:text-gray-400">
+                <MapPin className="h-5 w-5 mr-2" /> <span className="font-semibold">Location:</span> {product.city}
+              </div>
+            )}
             <p className="text-2xl font-bold text-green-700 dark:text-green-400">
               ₹{product.price.toFixed(2)} <span className="text-base font-normal text-gray-500 dark:text-gray-400">{product.quantityUnit}</span>
             </p>

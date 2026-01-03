@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, MapPin } from "lucide-react"; // Import MapPin icon
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Product } from "@/data/dummyProducts"; // Import from new centralized file
@@ -56,6 +56,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onProdu
           {product.description}
         </CardDescription>
         <p className="text-sm text-gray-500 dark:text-gray-400">Vendor: {product.vendorName}</p>
+        {product.city && (
+          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <MapPin className="h-4 w-4 mr-1" /> {product.city}
+          </div>
+        )}
       </CardHeader>
       <CardContent className="flex-grow flex flex-col justify-between p-4 pt-0">
         <p className="text-lg font-bold text-green-700 dark:text-green-400 mb-2">

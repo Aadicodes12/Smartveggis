@@ -12,6 +12,7 @@ export interface Product {
   vendorName: string;
   latitude?: number;
   longitude?: number;
+  city?: string; // New field for city name
 }
 
 export const dummyProducts: Product[] = [
@@ -27,6 +28,7 @@ export const dummyProducts: Product[] = [
     vendorName: "Patil Farms",
     latitude: 28.6139, // Example latitude for Delhi
     longitude: 77.2090, // Example longitude for Delhi
+    city: "Delhi", // Added city
   },
   {
     id: "2",
@@ -40,6 +42,7 @@ export const dummyProducts: Product[] = [
     vendorName: "Ramesh Ecogrow",
     latitude: 19.0760, // Example latitude for Mumbai
     longitude: 72.8777, // Example longitude for Mumbai
+    city: "Mumbai", // Added city
   },
   {
     id: "3",
@@ -53,6 +56,7 @@ export const dummyProducts: Product[] = [
     vendorName: "Mukesh Harvest",
     latitude: 12.9716, // Example latitude for Bangalore
     longitude: 77.5946, // Example longitude for Bangalore
+    city: "Bangalore", // Added city
   },
   {
     id: "4",
@@ -66,6 +70,7 @@ export const dummyProducts: Product[] = [
     vendorName: "Farm fresh Co.",
     latitude: 28.6139, // Example latitude for Delhi
     longitude: 77.2090, // Example longitude for Delhi
+    city: "Delhi", // Added city
   },
   {
     id: "5",
@@ -79,6 +84,7 @@ export const dummyProducts: Product[] = [
     vendorName: "Gupta Farm Pvt Ltd.",
     latitude: 19.0760, // Example latitude for Mumbai
     longitude: 72.8777, // Example longitude for Mumbai
+    city: "Mumbai", // Added city
   },
   {
     id: "9",
@@ -92,6 +98,7 @@ export const dummyProducts: Product[] = [
     vendorName: "Citrus Fruit",
     latitude: 12.9716, // Example latitude for Bangalore
     longitude: 77.5946, // Example longitude for Bangalore
+    city: "Bangalore", // Added city
   },
   {
     id: "10",
@@ -105,6 +112,7 @@ export const dummyProducts: Product[] = [
     vendorName: "Healthy Bites",
     latitude: 28.6139, // Example latitude for Delhi
     longitude: 77.2090, // Example longitude for Delhi
+    city: "Delhi", // Added city
   },
   {
     id: "11",
@@ -118,5 +126,6 @@ export const dummyProducts: Product[] = [
     vendorName: "Spice Route",
     latitude: 19.0760, // Example latitude for Mumbai
     longitude: 72.8777, // Example longitude for Mumbai
+    city: "Mumbai", // Added city
   },
 ];
