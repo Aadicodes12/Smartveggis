@@ -4,13 +4,17 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, User, Bell, Home, Package, Heart, Search, Menu, Trash2 } from "lucide-react";
+import { ShoppingCart, User, Bell, Home, Package, Heart, Search, Menu, Trash2, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useLanguage } from "@/contexts/LanguageContext"; // Import useLanguage
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface CartItem {
   id: string;
@@ -24,13 +28,36 @@ interface BuyerDashboardLayoutProps {
   children: React.ReactNode;
   cartItems: CartItem[];
   onSearch: (query: string) => void;
-  onRemoveFromCart: (productId: string) => void; // New prop for removing items
+  onRemoveFromCart: (productId: string) => void;
+  categoryFilter: string;
+  setCategoryFilter: (category: string) => void;
+  vendorRatingFilter: number;
+  setVendorRatingFilter: (rating: number) => void;
+  priceRangeFilter: [number, number];
+  setPriceRangeFilter: (range: [number, number]) => void;
+  deliveryLocationFilter: string;
+  setDeliveryLocationFilter: (location: string) => void;
+  availableCategories: string[];
 }
 
-const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({ children, cartItems, onSearch, onRemoveFromCart }) => {
+const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({
+  children,
+  cartItems,
+  onSearch,
+  onRemoveFromCart,
+  categoryFilter,
+  setCategoryFilter,
+  vendorRatingFilter,
+  setVendorRatingFilter,
+  priceRangeFilter,
+  setPriceRangeFilter,
+  deliveryLocationFilter,
+  setDeliveryLocationFilter,
+  availableCategories,
+}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const isMobile = useIsMobile();
-  const { t } = useLanguage(); // Use the translation hook
+  const { t } = useLanguage();
 
   const totalCartValue = cartItems.reduce((sum, item) => sum + item.price * item.orderedQuantity, 0);
 
@@ -58,26 +85,84 @@ const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({ children, c
       <Separator className="my-6" />
 
       <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">{t('filters')}</h3>
-      <div className="space-y-4">
-        {/* Placeholder for Category Filter */}
+      <div className="space-y-6">
+        {/* Category Filter */}
         <div>
-          <h4 className="font-medium text-gray-700 dark:text-gray-300">{t('category')}</h4>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{t('category_filter_desc')}</p>
+          <Label htmlFor="category-filter" className="font-medium text-gray-700 dark:text-gray-300">{t('category')}</Label>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{t('category_filter_desc')}</p>
+          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+            <SelectTrigger id="category-filter" className="w-full">
+              <SelectValue placeholder="Select a category" />
+            </SelectTrigger>
+            <SelectContent>
+              {availableCategories.map((category) => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
-        {/* Placeholder for Vendor Rating Filter */}
+
+        {/* Vendor Rating Filter */}
         <div>
-          <h4 className="font-medium text-gray-700 dark:text-gray-300">{t('vendor_rating')}</h4>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{t('vendor_rating_filter_desc')}</p>
+          <Label htmlFor="vendor-rating-filter" className="font-medium text-gray-700 dark:text-gray-300">{t('vendor_rating')}</Label>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{t('vendor_rating_filter_desc')}</p>
+          <RadioGroup
+            value={String(vendorRatingFilter)}
+            onValueChange={(value) => setVendorRatingFilter(Number(value))}
+            className="flex flex-col space-y-1"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="0" id="rating-0" />
+              <Label htmlFor="rating-0">Any Rating</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="4" id="rating-4" />
+              <Label htmlFor="rating-4" className="flex items-center">
+                <Star className="h-4 w-4 fill-yellow-500 text-yellow-500 mr-1" /> 4+ Stars
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="4.5" id="rating-4.5" />
+              <Label htmlFor="rating-4.5" className="flex items-center">
+                <Star className="h-4 w-4 fill-yellow-500 text-yellow-500 mr-1" /> 4.5+ Stars
+              </Label>
+            </div>
+          </RadioGroup>
         </div>
-        {/* Placeholder for Price Range Filter */}
+
+        {/* Price Range Filter */}
         <div>
-          <h4 className="font-medium text-gray-700 dark:text-gray-300">{t('price_range')}</h4>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{t('price_range_filter_desc')}</p>
+          <Label htmlFor="price-range-filter" className="font-medium text-gray-700 dark:text-gray-300">{t('price_range')}</Label>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{t('price_range_filter_desc')}</p>
+          <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
+            <span>₹{priceRangeFilter[0]}</span>
+            <span>₹{priceRangeFilter[1]}</span>
+          </div>
+          <Slider
+            id="price-range-filter"
+            min={0}
+            max={500}
+            step={10}
+            value={priceRangeFilter}
+            onValueChange={(value: [number, number]) => setPriceRangeFilter(value)}
+            className="w-full"
+          />
         </div>
-        {/* Placeholder for Delivery Location Filter */}
+
+        {/* Delivery Location Filter (Input for now, can be integrated with map later) */}
         <div>
-          <h4 className="font-medium text-gray-700 dark:text-gray-300">{t('delivery_location')}</h4>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{t('delivery_location_filter_desc')}</p>
+          <Label htmlFor="delivery-location-filter" className="font-medium text-gray-700 dark:text-gray-300">{t('delivery_location')}</Label>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{t('delivery_location_filter_desc')}</p>
+          <Input
+            id="delivery-location-filter"
+            type="text"
+            placeholder="e.g., New Delhi"
+            value={deliveryLocationFilter}
+            onChange={(e) => setDeliveryLocationFilter(e.target.value)}
+            className="w-full"
+          />
         </div>
       </div>
     </nav>

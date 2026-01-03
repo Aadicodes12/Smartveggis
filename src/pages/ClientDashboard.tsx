@@ -5,9 +5,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ClientProductListings from "@/components/ClientProductListings";
 import BuyerDashboardLayout from "@/components/BuyerDashboardLayout";
-import ProductPreviewDialog from "@/components/ProductPreviewDialog"; // Import the new dialog component
-import { useSupabase } from "@/contexts/SupabaseContext"; // Import useSupabase
-import { toast } from "sonner"; // For showing toasts
+import ProductPreviewDialog from "@/components/ProductPreviewDialog";
+import VendorMap from "@/components/VendorMap"; // Import the new map component
+import { useSupabase } from "@/contexts/SupabaseContext";
+import { toast } from "sonner";
 
 interface Product {
   id: string;
@@ -19,8 +20,10 @@ interface Product {
   minOrderQuantity: number;
   availableQuantity: number;
   vendorName: string;
-  latitude?: number; // Add latitude for geospatial data
-  longitude?: number; // Add longitude for geospatial data
+  latitude?: number;
+  longitude?: number;
+  category: string; // Added category for filtering
+  vendorRating: number; // Added vendorRating for filtering
 }
 
 interface CartItem {
@@ -41,22 +44,26 @@ const initialProducts: Product[] = [
     imageUrl: "/apple.jpg",
     minOrderQuantity: 1,
     availableQuantity: 50,
-    vendorName: "Patil Farms", // Updated name
-    latitude: 28.7041, // Example latitude
-    longitude: 77.1025, // Example longitude
+    vendorName: "Patil Farms",
+    latitude: 28.7041,
+    longitude: 77.1025,
+    category: "Fruits",
+    vendorRating: 4.8,
   },
   {
     id: "2",
-    name: "Heirloom Tomatoes",
-    description: "Vibrant and flavorful heirloom tomatoes, ideal for salads and gourmet dishes.",
+    name: "Tomatoes", // Updated description
+    description: "Vibrant and flavorful tomatoes, ideal for salads and gourmet dishes.", // Updated description
     price: 90.00,
     quantityUnit: "per kg",
     imageUrl: "/tomato.jpg",
     minOrderQuantity: 0.5,
     availableQuantity: 30,
-    vendorName: "Gupta Farm Produce", // Updated name
+    vendorName: "Gupta Farm Produce",
     latitude: 28.6139,
     longitude: 77.2090,
+    category: "Vegetables",
+    vendorRating: 4.5,
   },
   {
     id: "3",
@@ -67,14 +74,16 @@ const initialProducts: Product[] = [
     imageUrl: "/spinach.jpg",
     minOrderQuantity: 1,
     availableQuantity: 100,
-    vendorName: "Ecogrow", // Updated name
+    vendorName: "Ecogrow",
     latitude: 28.5355,
     longitude: 77.3910,
+    category: "Leafy Greens",
+    vendorRating: 4.9,
   },
   {
     id: "4",
-    name: "Sweet Potatoes",
-    description: "Naturally sweet and versatile sweet potatoes, perfect for roasting or mashing.",
+    name: "Potatoes", // Updated description
+    description: "Versatile potatoes, perfect for roasting or mashing.", // Updated description
     price: 90.00,
     quantityUnit: "per kg",
     imageUrl: "/potato.jpg",
@@ -83,6 +92,8 @@ const initialProducts: Product[] = [
     vendorName: "Farm Fresh Co.",
     latitude: 28.4595,
     longitude: 77.0266,
+    category: "Vegetables",
+    vendorRating: 4.2,
   },
   {
     id: "5",
@@ -96,6 +107,8 @@ const initialProducts: Product[] = [
     vendorName: "Tropical Delights",
     latitude: 28.7041,
     longitude: 77.1025,
+    category: "Fruits",
+    vendorRating: 4.7,
   },
   {
     id: "9",
@@ -109,6 +122,8 @@ const initialProducts: Product[] = [
     vendorName: "Citrus Grove",
     latitude: 28.6139,
     longitude: 77.2090,
+    category: "Fruits",
+    vendorRating: 4.6,
   },
   {
     id: "10",
@@ -122,6 +137,8 @@ const initialProducts: Product[] = [
     vendorName: "Healthy Bites",
     latitude: 28.5355,
     longitude: 77.3910,
+    category: "Vegetables",
+    vendorRating: 4.0,
   },
   {
     id: "11",
@@ -135,39 +152,87 @@ const initialProducts: Product[] = [
     vendorName: "Spice Route",
     latitude: 28.4595,
     longitude: 77.0266,
+    category: "Spices",
+    vendorRating: 4.3,
   },
 ];
 
 const ClientDashboard = () => {
-  const { supabase } = useSupabase(); // Use Supabase client
+  const { supabase } = useSupabase();
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductPreviewOpen, setIsProductPreviewOpen] = useState(false);
+  const [showMapView, setShowMapView] = useState(false); // State to toggle between list and map view
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null); // User's current location
 
-  // Initialize filtered products when component mounts or products change
+  // Filter states
+  const [categoryFilter, setCategoryFilter] = useState<string>("All");
+  const [vendorRatingFilter, setVendorRatingFilter] = useState<number>(0); // Min rating
+  const [priceRangeFilter, setPriceRangeFilter] = useState<[number, number]>([0, 500]); // [min, max]
+  const [deliveryLocationFilter, setDeliveryLocationFilter] = useState<string>(""); // For future use with geocoding
+
+  // Get user's current location
   useEffect(() => {
-    setFilteredProducts(products);
-  }, [products]);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.error("Error getting user location:", error);
+          toast.error("Could not retrieve your location. Showing all vendors.");
+          // Default to a central location if geolocation fails
+          setUserLocation({ lat: 28.7041, lng: 77.1025 }); 
+        }
+      );
+    } else {
+      toast.info("Geolocation is not supported by your browser. Showing all vendors.");
+      // Default to a central location if geolocation is not supported
+      setUserLocation({ lat: 28.7041, lng: 77.1025 });
+    }
+  }, []);
 
-  // Real-time product updates from Supabase (placeholder for now)
+  // Apply filters whenever filter states or products change
   useEffect(() => {
-    // This is where we'd set up real-time subscriptions to the 'products' table
-    // For now, we'll keep the dummy data.
-    // Example:
-    // const channel = supabase
-    //   .channel('products_changes')
-    //   .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, (payload) => {
-    //     console.log('Change received!', payload);
-    //     // Logic to update products state based on payload
-    //   })
-    //   .subscribe();
+    let currentFilteredProducts = products;
 
-    // return () => {
-    //   supabase.removeChannel(channel);
-    // };
-  }, [supabase]);
+    // Apply search query filter (from BuyerDashboardLayout)
+    // This will be handled by the onSearch prop, which updates filteredProducts directly.
+    // So, we need to ensure the search query is also applied here if it's a persistent filter.
+    // For now, let's assume onSearch updates filteredProducts, and these filters refine that.
+
+    // Category filter
+    if (categoryFilter !== "All") {
+      currentFilteredProducts = currentFilteredProducts.filter(
+        (product) => product.category === categoryFilter
+      );
+    }
+
+    // Vendor Rating filter
+    currentFilteredProducts = currentFilteredProducts.filter(
+      (product) => product.vendorRating >= vendorRatingFilter
+    );
+
+    // Price Range filter
+    currentFilteredProducts = currentFilteredProducts.filter(
+      (product) => product.price >= priceRangeFilter[0] && product.price <= priceRangeFilter[1]
+    );
+
+    // Delivery Location filter (placeholder for future implementation with actual location data)
+    // For now, this filter will not actively filter products based on location,
+    // but the map will show nearby vendors based on userLocation.
+    if (deliveryLocationFilter) {
+      // This would involve more complex geospatial queries or client-side distance calculations
+      // For now, it's a visual indicator on the map.
+    }
+
+    setFilteredProducts(currentFilteredProducts);
+  }, [products, categoryFilter, vendorRatingFilter, priceRangeFilter, deliveryLocationFilter]);
 
   const handleAddToCart = (product: Product, quantity: number) => {
     setCartItems((prevItems) => {
@@ -195,7 +260,22 @@ const ClientDashboard = () => {
 
   const handleSearch = (query: string) => {
     if (!query) {
-      setFilteredProducts(products);
+      // If query is empty, reset to all products, then apply other filters
+      let currentFilteredProducts = products;
+
+      if (categoryFilter !== "All") {
+        currentFilteredProducts = currentFilteredProducts.filter(
+          (product) => product.category === categoryFilter
+        );
+      }
+      currentFilteredProducts = currentFilteredProducts.filter(
+        (product) => product.vendorRating >= vendorRatingFilter
+      );
+      currentFilteredProducts = currentFilteredProducts.filter(
+        (product) => product.price >= priceRangeFilter[0] && product.price <= priceRangeFilter[1]
+      );
+
+      setFilteredProducts(currentFilteredProducts);
       return;
     }
     const lowerCaseQuery = query.toLowerCase();
@@ -217,37 +297,61 @@ const ClientDashboard = () => {
     setSelectedProduct(null);
   };
 
+  const availableCategories = ["All", ...new Set(products.map(p => p.category))];
+
   return (
-    <BuyerDashboardLayout cartItems={cartItems} onSearch={handleSearch} onRemoveFromCart={handleRemoveFromCart}>
+    <BuyerDashboardLayout
+      cartItems={cartItems}
+      onSearch={handleSearch}
+      onRemoveFromCart={handleRemoveFromCart}
+      categoryFilter={categoryFilter}
+      setCategoryFilter={setCategoryFilter}
+      vendorRatingFilter={vendorRatingFilter}
+      setVendorRatingFilter={setVendorRatingFilter}
+      priceRangeFilter={priceRangeFilter}
+      setPriceRangeFilter={setPriceRangeFilter}
+      deliveryLocationFilter={deliveryLocationFilter}
+      setDeliveryLocationFilter={setDeliveryLocationFilter}
+      availableCategories={availableCategories}
+    >
       <div className="w-full max-w-6xl mx-auto py-4">
         <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">Available Products</h1>
         <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 text-center">
           Explore fresh fruits and vegetables from local vendors.
         </p>
         
-        {/* Placeholder for Listings View Toggle and Sorting Options */}
-        <div className="flex justify-between items-center mb-6 px-4">
-          <div className="flex gap-2">
-            {/* <Button variant="outline" size="sm">Card View</Button>
-            <Button variant="outline" size="sm">List View</Button> */}
-            {/* Implement actual toggle later */}
-          </div>
-          <div>
-            {/* <select className="p-2 border rounded-md">
-              <option>Sort by: Popularity</option>
-              <option>Sort by: Price (Low to High)</option>
-              <option>Sort by: Price (High to Low)</option>
-              <option>Sort by: Newest</option>
-            </select> */}
-            {/* Implement actual sorting later */}
-          </div>
+        <div className="flex justify-center gap-4 mb-6 px-4">
+          <Button
+            variant={!showMapView ? "default" : "outline"}
+            onClick={() => setShowMapView(false)}
+            className="px-6 py-3 text-lg"
+          >
+            Product Listings
+          </Button>
+          <Button
+            variant={showMapView ? "default" : "outline"}
+            onClick={() => setShowMapView(true)}
+            className="px-6 py-3 text-lg"
+          >
+            View on Map
+          </Button>
         </div>
 
-        <ClientProductListings 
-          products={filteredProducts} 
-          onAddToCart={handleAddToCart} 
-          onProductClick={handleProductClick} 
-        />
+        {showMapView ? (
+          userLocation ? (
+            <VendorMap products={filteredProducts} userLocation={userLocation} />
+          ) : (
+            <div className="text-center text-gray-600 dark:text-gray-400 text-lg">
+              Loading map and your location...
+            </div>
+          )
+        ) : (
+          <ClientProductListings 
+            products={filteredProducts} 
+            onAddToCart={handleAddToCart} 
+            onProductClick={handleProductClick} 
+          />
+        )}
 
         <div className="mt-12 text-center">
           <Link to="/">
