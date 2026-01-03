@@ -54,7 +54,7 @@ const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({
   setPriceRangeFilter,
   deliveryLocationFilter,
   setDeliveryLocationFilter,
-  availableCategories,
+  availableCategories = [], // Added default empty array here
   userLocation, // Destructure new prop
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
