@@ -25,7 +25,7 @@ interface Product {
 }
 
 // Dummy data for demonstration. In a real app, this would come from an API.
-const dummyProducts: Product[] = [
+export const dummyProducts: Product[] = [ // Exporting dummyProducts
   {
     id: "1",
     name: "Organic Apples",
