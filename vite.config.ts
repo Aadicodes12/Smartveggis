@@ -17,4 +17,9 @@ export default defineConfig(() => ({
   optimizeDeps: {
     include: ["react-map-gl", "mapbox-gl"], // Added mapbox-gl here
   },
+  build: {
+    commonjsOptions: {
+      include: [/node_modules\/react-map-gl/, /node_modules\/mapbox-gl/],
+    },
+  },
 }));
