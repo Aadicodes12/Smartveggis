@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import ClientProductListings from "@/components/ClientProductListings";
 import BuyerDashboardLayout from "@/components/BuyerDashboardLayout";
 import ProductPreviewDialog from "@/components/ProductPreviewDialog"; // Import the new dialog component
+import { useSupabase } from "@/contexts/SupabaseContext"; // Import useSupabase
+import { toast } from "sonner"; // For showing toasts
 
 interface Product {
   id: string;
@@ -39,7 +41,7 @@ const initialProducts: Product[] = [
     imageUrl: "/apple.jpg",
     minOrderQuantity: 1,
     availableQuantity: 50,
-    vendorName: "Green Farms",
+    vendorName: "Patil Farms", // Updated name
     latitude: 28.7041, // Example latitude
     longitude: 77.1025, // Example longitude
   },
@@ -52,7 +54,7 @@ const initialProducts: Product[] = [
     imageUrl: "/tomato.jpg",
     minOrderQuantity: 0.5,
     availableQuantity: 30,
-    vendorName: "Sunny Fields",
+    vendorName: "Gupta Farm Produce", // Updated name
     latitude: 28.6139,
     longitude: 77.2090,
   },
@@ -65,7 +67,7 @@ const initialProducts: Product[] = [
     imageUrl: "/spinach.jpg",
     minOrderQuantity: 1,
     availableQuantity: 100,
-    vendorName: "Organic Harvest",
+    vendorName: "Ecogrow", // Updated name
     latitude: 28.5355,
     longitude: 77.3910,
   },
@@ -137,6 +139,7 @@ const initialProducts: Product[] = [
 ];
 
 const ClientDashboard = () => {
+  const { supabase } = useSupabase(); // Use Supabase client
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
@@ -148,6 +151,24 @@ const ClientDashboard = () => {
     setFilteredProducts(products);
   }, [products]);
 
+  // Real-time product updates from Supabase (placeholder for now)
+  useEffect(() => {
+    // This is where we'd set up real-time subscriptions to the 'products' table
+    // For now, we'll keep the dummy data.
+    // Example:
+    // const channel = supabase
+    //   .channel('products_changes')
+    //   .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, (payload) => {
+    //     console.log('Change received!', payload);
+    //     // Logic to update products state based on payload
+    //   })
+    //   .subscribe();
+
+    // return () => {
+    //   supabase.removeChannel(channel);
+    // };
+  }, [supabase]);
+
   const handleAddToCart = (product: Product, quantity: number) => {
     setCartItems((prevItems) => {
       const existingItemIndex = prevItems.findIndex((item) => item.id === product.id);
@@ -155,10 +176,20 @@ const ClientDashboard = () => {
       if (existingItemIndex > -1) {
         const updatedItems = [...prevItems];
         updatedItems[existingItemIndex].orderedQuantity += quantity;
+        toast.success(`${quantity} ${product.quantityUnit} of ${product.name} added to cart.`);
         return updatedItems;
       } else {
+        toast.success(`${quantity} ${product.quantityUnit} of ${product.name} added to cart.`);
         return [...prevItems, { ...product, orderedQuantity: quantity }];
       }
+    });
+  };
+
+  const handleRemoveFromCart = (productId: string) => {
+    setCartItems((prevItems) => {
+      const updatedItems = prevItems.filter((item) => item.id !== productId);
+      toast.info("Product removed from cart.");
+      return updatedItems;
     });
   };
 
@@ -187,7 +218,7 @@ const ClientDashboard = () => {
   };
 
   return (
-    <BuyerDashboardLayout cartItems={cartItems} onSearch={handleSearch}>
+    <BuyerDashboardLayout cartItems={cartItems} onSearch={handleSearch} onRemoveFromCart={handleRemoveFromCart}>
       <div className="w-full max-w-6xl mx-auto py-4">
         <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">Available Products</h1>
         <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 text-center">
