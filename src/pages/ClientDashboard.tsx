@@ -45,7 +45,7 @@ const dummyProducts: Product[] = [
     description: "Vibrant and flavorful heirloom tomatoes, ideal for salads and gourmet dishes.",
     price: 180.00,
     quantityUnit: "per kg",
-    imageUrl: "https://images.unsplash.com/photo-1591681334078-d3164121111d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxoZWlybG9vbSUyMHRvbWF0b2VzfGVufDB8fHx8MTcxOTk0NjY1Nnww&ixlib=rb-4.0.3&q=80&w=1080",
+    imageUrl: "/tomato.jpg", // Updated image path
     minOrderQuantity: 0.5,
     availableQuantity: 30,
     vendorName: "Sunny Fields",
@@ -126,6 +126,28 @@ const dummyProducts: Product[] = [
     minOrderQuantity: 1,
     availableQuantity: 45,
     vendorName: "Citrus Grove",
+  },
+  {
+    id: "10",
+    name: "Bitter Gourd (Karela)",
+    description: "Fresh bitter gourd, known for its health benefits and unique taste.",
+    price: 70.00,
+    quantityUnit: "per kg",
+    imageUrl: "/karela.jpg", // New image path
+    minOrderQuantity: 0.5,
+    availableQuantity: 35,
+    vendorName: "Healthy Bites",
+  },
+  {
+    id: "11",
+    name: "Garlic",
+    description: "Pungent and flavorful garlic, essential for many cuisines.",
+    price: 120.00,
+    quantityUnit: "per 250g",
+    imageUrl: "/garlic.jpg", // New image path
+    minOrderQuantity: 0.25,
+    availableQuantity: 60,
+    vendorName: "Spice Route",
   },
 ];
 
