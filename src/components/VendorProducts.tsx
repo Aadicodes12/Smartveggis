@@ -1,21 +1,27 @@
 "use client";
 
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
-import { Product } from "@/data/dummyProducts"; // Import from new centralized file
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+  quantityUnit?: string; // Make quantityUnit optional for now, or ensure it's always provided
+}
 
 interface VendorProductsProps {
   products: Product[];
 }
 
 const VendorProducts: React.FC<VendorProductsProps> = ({ products }) => {
-  const navigate = useNavigate();
-
   const handleEdit = (productId: string) => {
-    navigate(`/vendor-edit-product/${productId}`);
+    console.log(`Edit product with ID: ${productId}`);
+    // In a real application, this would navigate to an edit page or open a modal
   };
 
   const handleDelete = (productId: string) => {
@@ -41,11 +47,6 @@ const VendorProducts: React.FC<VendorProductsProps> = ({ products }) => {
               <p className="text-lg font-bold text-green-700 dark:text-green-400 mb-4">
                 ₹{product.price.toFixed(2)} {product.quantityUnit || "per kg"}
               </p>
-              {product.city && (
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-                  City: {product.city}
-                </p>
-              )}
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => handleEdit(product.id)} className="flex-1">
                   <Pencil className="h-4 w-4 mr-2" /> Edit

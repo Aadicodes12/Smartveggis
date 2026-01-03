@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, User, Bell, Home, Package, Heart, Search, Menu, Trash2 } from "lucide-react";
+import { ShoppingCart, User, Bell, Home, Package, Heart, Search, Menu } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
@@ -23,10 +23,9 @@ interface BuyerDashboardLayoutProps {
   children: React.ReactNode;
   cartItems: CartItem[];
   onSearch: (query: string) => void;
-  onRemoveFromCart: (itemId: string) => void; // New prop for removing items
 }
 
-const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({ children, cartItems, onSearch, onRemoveFromCart }) => {
+const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({ children, cartItems, onSearch }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const isMobile = useIsMobile();
 
@@ -144,18 +143,7 @@ const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({ children, c
                     {cartItems.map((item) => (
                       <div key={item.id} className="flex justify-between items-center text-sm">
                         <span>{item.name} ({item.orderedQuantity} {item.quantityUnit})</span>
-                        <div className="flex items-center gap-2">
-                          <span>₹{(item.price * item.orderedQuantity).toFixed(2)}</span>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-6 w-6 text-red-500 hover:text-red-700"
-                            onClick={() => onRemoveFromCart(item.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            <span className="sr-only">Remove item</span>
-                          </Button>
-                        </div>
+                        <span>₹{(item.price * item.orderedQuantity).toFixed(2)}</span>
                       </div>
                     ))}
                   </div>

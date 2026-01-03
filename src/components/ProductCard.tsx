@@ -6,13 +6,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ShoppingCart } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { Product } from "@/data/dummyProducts"; // Import from new centralized file
+import { toast } from "sonner"; // Using sonner for toasts
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  quantityUnit: string;
+  imageUrl: string;
+  minOrderQuantity: number;
+  availableQuantity: number;
+  vendorName: string; // Added vendorName
+}
 
 interface ProductCardProps {
   product: Product;
   onAddToCart: (product: Product, quantity: number) => void;
-  onProductClick: (product: Product) => void;
+  onProductClick: (product: Product) => void; // New prop for opening preview
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onProductClick }) => {
@@ -26,7 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onProdu
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent card click from firing when button is clicked
     if (desiredQuantity < product.minOrderQuantity) {
       toast.error(`Minimum order quantity for ${product.name} is ${product.minOrderQuantity} ${product.quantityUnit}.`);
       return;
@@ -47,7 +58,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onProdu
   return (
     <Card 
       className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg cursor-pointer"
-      onClick={() => onProductClick(product)}
+      onClick={() => onProductClick(product)} // Make the card clickable
     >
       <img src={product.imageUrl} alt={product.name} className="w-full h-48 object-cover" />
       <CardHeader className="p-4 pb-2">
@@ -56,9 +67,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onProdu
           {product.description}
         </CardDescription>
         <p className="text-sm text-gray-500 dark:text-gray-400">Vendor: {product.vendorName}</p>
-        {product.city && (
-          <p className="text-sm text-gray-500 dark:text-gray-400">City: {product.city}</p>
-        )}
       </CardHeader>
       <CardContent className="flex-grow flex flex-col justify-between p-4 pt-0">
         <p className="text-lg font-bold text-green-700 dark:text-green-400 mb-2">
@@ -79,7 +87,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onProdu
             min={product.minOrderQuantity}
             value={desiredQuantity}
             onChange={handleQuantityChange}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()} // Prevent card click when interacting with input
             className="w-24 text-center"
           />
           <span className="text-sm text-gray-600 dark:text-gray-300">{product.quantityUnit}</span>

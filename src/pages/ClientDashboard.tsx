@@ -5,11 +5,19 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ClientProductListings from "@/components/ClientProductListings";
 import BuyerDashboardLayout from "@/components/BuyerDashboardLayout";
-import ProductPreviewDialog from "@/components/ProductPreviewDialog";
-import UserProfileCard from "@/components/UserProfileCard";
-import { Product, dummyProducts } from "@/data/dummyProducts";
-import { useSession } from "@/contexts/SessionContext";
-import { useLanguage } from "@/contexts/LanguageContext";
+import ProductPreviewDialog from "@/components/ProductPreviewDialog"; // Import the new dialog component
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  quantityUnit: string;
+  imageUrl: string;
+  minOrderQuantity: number;
+  availableQuantity: number;
+  vendorName: string;
+}
 
 interface CartItem {
   id: string;
@@ -19,14 +27,100 @@ interface CartItem {
   orderedQuantity: number;
 }
 
+const dummyProducts: Product[] = [
+  {
+    id: "1",
+    name: "Organic Apples",
+    description: "Freshly picked organic apples, sweet and crisp. Perfect for snacking or baking.",
+    price: 120.00, // Adjusted price
+    quantityUnit: "per kg",
+    imageUrl: "/apple.jpg",
+    minOrderQuantity: 1,
+    availableQuantity: 50,
+    vendorName: "Patil Farms",
+  },
+  {
+    id: "2",
+    name: "Tomatoes",
+    description: "Vibrant and flavorful tomatoes, ideal for salads and gourmet dishes.",
+    price: 90.00, // Adjusted price
+    quantityUnit: "per kg",
+    imageUrl: "/tomato.jpg",
+    minOrderQuantity: 0.5,
+    availableQuantity: 30,
+    vendorName: "Ramesh Ecogrow",
+  },
+  {
+    id: "3",
+    name: "Fresh Spinach",
+    description: "Nutrient-rich fresh spinach, great for smoothies, salads, or sautéing.",
+    price: 60.00,
+    quantityUnit: "per bunch",
+    imageUrl: "/spinach.jpg",
+    minOrderQuantity: 1,
+    availableQuantity: 100,
+    vendorName: " Mukesh Harvest",
+  },
+  {
+    id: "4",
+    name: "Potatoes",
+    description: "Naturally sweet and versatile potatoes, perfect for roasting or mashing.",
+    price: 90.00,
+    quantityUnit: "per kg",
+    imageUrl: "/potato.jpg",
+    minOrderQuantity: 2,
+    availableQuantity: 80,
+    vendorName: "Farm fresh Co.",
+  },
+  {
+    id: "5",
+    name: "Organic Bananas",
+    description: "Ripe organic bananas, a healthy and convenient snack.",
+    price: 70.00,
+    quantityUnit: "per dozen",
+    imageUrl: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwYmFuYW5hc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
+    minOrderQuantity: 1,
+    availableQuantity: 60,
+    vendorName: "Gupta Farm Pvt Ltd.",
+  },
+  {
+    id: "9",
+    name: "Fresh Oranges",
+    description: "Juicy and sweet oranges, perfect for a healthy snack or fresh juice.",
+    price: 100.00,
+    quantityUnit: "per kg",
+    imageUrl: "/oranges.jpg",
+    minOrderQuantity: 1,
+    availableQuantity: 45,
+    vendorName: "Citrus Fruit",
+  },
+  {
+    id: "10",
+    name: "Bitter Gourd (Karela)",
+    description: "Fresh bitter gourd, known for its health benefits and unique taste.",
+    price: 70.00,
+    quantityUnit: "per kg",
+    imageUrl: "/karela.jpg",
+    minOrderQuantity: 0.5,
+    availableQuantity: 35,
+    vendorName: "Healthy Bites",
+  },
+  {
+    id: "11",
+    name: "Garlic",
+    description: "Pungent and flavorful garlic, essential for many cuisines.",
+    price: 120.00,
+    quantityUnit: "per 250g",
+    imageUrl: "/garlic.jpg",
+    minOrderQuantity: 0.25,
+    availableQuantity: 60,
+    vendorName: "Spice Route",
+  },
+];
+
 const ClientDashboard = () => {
-  const { user, profile, isLoading, signOut } = useSession();
-  const { t } = useLanguage();
-
-  const initialProducts: Product[] = dummyProducts;
-
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(initialProducts);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(dummyProducts);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductPreviewOpen, setIsProductPreviewOpen] = useState(false);
 
@@ -44,17 +138,13 @@ const ClientDashboard = () => {
     });
   };
 
-  const handleRemoveFromCart = (itemId: string) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
-  };
-
   const handleSearch = (query: string) => {
     if (!query) {
-      setFilteredProducts(initialProducts);
+      setFilteredProducts(dummyProducts);
       return;
     }
     const lowerCaseQuery = query.toLowerCase();
-    const results = initialProducts.filter(
+    const results = dummyProducts.filter(
       (product) =>
         product.name.toLowerCase().includes(lowerCaseQuery) ||
         product.vendorName.toLowerCase().includes(lowerCaseQuery)
@@ -72,30 +162,29 @@ const ClientDashboard = () => {
     setSelectedProduct(null);
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
-        <p className="text-lg text-gray-600 dark:text-gray-400">Loading dashboard...</p>
-      </div>
-    );
-  }
-
   return (
-    <BuyerDashboardLayout cartItems={cartItems} onSearch={handleSearch} onRemoveFromCart={handleRemoveFromCart}>
+    <BuyerDashboardLayout cartItems={cartItems} onSearch={handleSearch}>
       <div className="w-full max-w-6xl mx-auto py-4">
-        <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">{t('welcome_client')}</h1>
+        <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">Available Products</h1>
         <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 text-center">
           Explore fresh fruits and vegetables from local vendors.
         </p>
         
-        <div className="mb-8">
-          {user && <UserProfileCard userId={user.id} />}
-        </div>
-
+        {/* Placeholder for Listings View Toggle and Sorting Options */}
         <div className="flex justify-between items-center mb-6 px-4">
           <div className="flex gap-2">
+            {/* <Button variant="outline" size="sm">Card View</Button>
+            <Button variant="outline" size="sm">List View</Button> */}
+            {/* Implement actual toggle later */}
           </div>
           <div>
+            {/* <select className="p-2 border rounded-md">
+              <option>Sort by: Popularity</option>
+              <option>Sort by: Price (Low to High)</option>
+              <option>Sort by: Price (High to Low)</option>
+              <option>Sort by: Newest</option>
+            </select> */}
+            {/* Implement actual sorting later */}
           </div>
         </div>
 
@@ -106,17 +195,11 @@ const ClientDashboard = () => {
         />
 
         <div className="mt-12 text-center">
-          {user ? (
-            <Button onClick={signOut} variant="destructive" className="px-6 py-3 text-lg shadow-lg transform transition-transform hover:scale-105">
-              {t('logout')}
+          <Link to="/">
+            <Button variant="outline" className="px-6 py-3 text-lg border-green-600 text-green-600 hover:bg-green-50 dark:border-green-400 dark:text-green-400 dark:hover:bg-gray-700 shadow-lg transform transition-transform hover:scale-105">
+              Back to Home
             </Button>
-          ) : (
-            <Link to="/auth">
-              <Button className="px-6 py-3 text-lg bg-green-600 hover:bg-green-700 text-white">
-                Go to Login
-              </Button>
-            </Link>
-          )}
+          </Link>
         </div>
       </div>
 

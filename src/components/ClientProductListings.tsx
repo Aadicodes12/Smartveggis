@@ -2,12 +2,23 @@
 
 import React from "react";
 import ProductCard from "./ProductCard";
-import { Product } from "@/data/dummyProducts"; // Import from new centralized file
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  quantityUnit: string;
+  imageUrl: string;
+  minOrderQuantity: number;
+  availableQuantity: number;
+  vendorName: string;
+}
 
 interface ClientProductListingsProps {
   products: Product[];
   onAddToCart: (product: Product, quantity: number) => void;
-  onProductClick: (product: Product) => void;
+  onProductClick: (product: Product) => void; // New prop
 }
 
 const ClientProductListings: React.FC<ClientProductListingsProps> = ({ products, onAddToCart, onProductClick }) => {
@@ -21,7 +32,7 @@ const ClientProductListings: React.FC<ClientProductListingsProps> = ({ products,
             key={product.id} 
             product={product} 
             onAddToCart={onAddToCart} 
-            onProductClick={onProductClick}
+            onProductClick={onProductClick} // Pass the new prop
           />
         ))
       )}
