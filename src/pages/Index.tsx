@@ -13,7 +13,7 @@ const Index = () => {
           <div className="flex justify-center items-center gap-4 mb-4">
             <LeafyGreen className="h-12 w-12 text-green-600 dark:text-green-400" />
             <CardTitle className="text-4xl font-extrabold text-green-800 dark:text-green-200">
-              Welcome to SmartVegiS
+              Welcome to SmartVegis
             </CardTitle>
             <ShoppingCart className="h-12 w-12 text-green-600 dark:text-green-400" />
           </div>
