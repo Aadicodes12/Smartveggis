@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import Map, { Marker, Popup, ViewStateChangeEvent } from "react-map-gl";
+import * as ReactMapGL from "react-map-gl"; // Changed to namespace import
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Product } from "@/data/dummyProducts";
 import { MapPin } from "lucide-react";
@@ -24,13 +24,13 @@ const ProductMap: React.FC<ProductMapProps> = ({ products, onProductClick }) => 
 
   const mapRef = useRef<any>(null);
 
-  const handleViewportChange = (event: ViewStateChangeEvent) => {
+  const handleViewportChange = (event: ReactMapGL.ViewStateChangeEvent) => { // Use ReactMapGL.ViewStateChangeEvent
     setViewport(event.viewState);
   };
 
   return (
     <div className="w-full h-[600px] rounded-lg overflow-hidden shadow-lg">
-      <Map
+      <ReactMapGL.Map // Use ReactMapGL.Map
         ref={mapRef}
         mapboxAccessToken={MAPTILER_API_KEY} // MapTiler uses Mapbox GL JS, so this prop is used for the key
         initialViewState={viewport}
@@ -40,7 +40,7 @@ const ProductMap: React.FC<ProductMapProps> = ({ products, onProductClick }) => 
       >
         {products.map((product) => (
           product.latitude && product.longitude && (
-            <Marker
+            <ReactMapGL.Marker // Use ReactMapGL.Marker
               key={product.id}
               latitude={product.latitude}
               longitude={product.longitude}
@@ -51,12 +51,12 @@ const ProductMap: React.FC<ProductMapProps> = ({ products, onProductClick }) => 
               }}
             >
               <MapPin className="h-8 w-8 text-green-600 cursor-pointer" />
-            </Marker>
+            </ReactMapGL.Marker>
           )
         ))}
 
         {popupInfo && (
-          <Popup
+          <ReactMapGL.Popup // Use ReactMapGL.Popup
             anchor="top"
             latitude={popupInfo.latitude!}
             longitude={popupInfo.longitude!}
@@ -83,9 +83,9 @@ const ProductMap: React.FC<ProductMapProps> = ({ products, onProductClick }) => 
                 View Details
               </Button>
             </div>
-          </Popup>
+          </ReactMapGL.Popup>
         )}
-      </Map>
+      </ReactMapGL.Map>
     </div>
   );
 };
