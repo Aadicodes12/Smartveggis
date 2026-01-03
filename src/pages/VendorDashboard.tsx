@@ -10,56 +10,49 @@ const dummyProducts = [
     id: "1",
     name: "Organic Apples",
     description: "Freshly picked organic apples, sweet and crisp. Perfect for snacking or baking.",
-    price: 2.99,
+    price: 120.00, // Adjusted price
     imageUrl: "/apple.jpg",
   },
   {
     id: "2",
     name: "Heirloom Tomatoes",
     description: "Vibrant and flavorful heirloom tomatoes, ideal for salads and gourmet dishes.",
-    price: 4.50,
+    price: 90.00, // Adjusted price
     imageUrl: "/tomato.jpg",
   },
   {
     id: "3",
     name: "Fresh Spinach",
     description: "Nutrient-rich fresh spinach, great for smoothies, salads, or sautéing.",
-    price: 1.75,
+    price: 60.00, // Adjusted price
     imageUrl: "/spinach.jpg",
   },
   {
     id: "4",
     name: "Sweet Potatoes",
     description: "Naturally sweet and versatile sweet potatoes, perfect for roasting or mashing.",
-    price: 2.20,
+    price: 90.00, // Adjusted price
     imageUrl: "/potato.jpg",
   },
   {
     id: "5",
     name: "Organic Bananas",
     description: "Ripe organic bananas, a healthy and convenient snack.",
-    price: 0.79,
+    price: 70.00, // Adjusted price
     imageUrl: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwYmFuYW5hc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
   },
   {
-    id: "6",
-    name: "Bell Peppers (Mixed)",
-    description: "A colorful mix of red, yellow, and green bell peppers, great for stir-fries and salads.",
-    price: 3.50,
-    imageUrl: "https://images.unsplash.com/photo-1518635013023-f047779701a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxiZWxsJTIwcGVwcGVyc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
-  },
-  {
-    id: "7",
+    id: "7", // ID changed from 6 to 7 after removing bell peppers
     name: "Bitter Gourd (Karela)",
     description: "Fresh bitter gourd, known for its health benefits and unique taste.",
-    price: 2.50,
+    price: 70.00, // Adjusted price
     imageUrl: "/karela.jpg",
   },
   {
     id: "8",
     name: "Garlic",
     description: "Pungent and flavorful garlic, essential for many cuisines.",
-    price: 1.99,
+    price: 120.00, // Adjusted price
     imageUrl: "/garlic.jpg",
   },
 ];

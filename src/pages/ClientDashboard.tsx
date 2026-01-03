@@ -32,9 +32,9 @@ const dummyProducts: Product[] = [
     id: "1",
     name: "Organic Apples",
     description: "Freshly picked organic apples, sweet and crisp. Perfect for snacking or baking.",
-    price: 250.00,
+    price: 120.00, // Adjusted price
     quantityUnit: "per kg",
-    imageUrl: "/apple.jpg", // Updated image path
+    imageUrl: "/apple.jpg",
     minOrderQuantity: 1,
     availableQuantity: 50,
     vendorName: "Green Farms",
@@ -43,9 +43,9 @@ const dummyProducts: Product[] = [
     id: "2",
     name: "Heirloom Tomatoes",
     description: "Vibrant and flavorful heirloom tomatoes, ideal for salads and gourmet dishes.",
-    price: 180.00,
+    price: 90.00, // Adjusted price
     quantityUnit: "per kg",
-    imageUrl: "/tomato.jpg", // Updated image path
+    imageUrl: "/tomato.jpg",
     minOrderQuantity: 0.5,
     availableQuantity: 30,
     vendorName: "Sunny Fields",
@@ -56,7 +56,7 @@ const dummyProducts: Product[] = [
     description: "Nutrient-rich fresh spinach, great for smoothies, salads, or sautéing.",
     price: 60.00,
     quantityUnit: "per bunch",
-    imageUrl: "/spinach.jpg", // Updated image path
+    imageUrl: "/spinach.jpg",
     minOrderQuantity: 1,
     availableQuantity: 100,
     vendorName: "Organic Harvest",
@@ -67,7 +67,7 @@ const dummyProducts: Product[] = [
     description: "Naturally sweet and versatile sweet potatoes, perfect for roasting or mashing.",
     price: 90.00,
     quantityUnit: "per kg",
-    imageUrl: "/potato.jpg", // Updated image path
+    imageUrl: "/potato.jpg",
     minOrderQuantity: 2,
     availableQuantity: 80,
     vendorName: "Farm Fresh Co.",
@@ -82,17 +82,6 @@ const dummyProducts: Product[] = [
     minOrderQuantity: 1,
     availableQuantity: 60,
     vendorName: "Tropical Delights",
-  },
-  {
-    id: "6",
-    name: "Bell Peppers (Mixed)",
-    description: "A colorful mix of red, yellow, and green bell peppers, great for stir-fries and salads.",
-    price: 150.00,
-    quantityUnit: "per kg",
-    imageUrl: "https://images.unsplash.com/photo-1518635013023-f047779701a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxiZWxsJTIwcGVwcGVyc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
-    minOrderQuantity: 0.5,
-    availableQuantity: 40,
-    vendorName: "Rainbow Produce",
   },
   {
     id: "7",
@@ -122,7 +111,7 @@ const dummyProducts: Product[] = [
     description: "Juicy and sweet oranges, perfect for a healthy snack or fresh juice.",
     price: 100.00,
     quantityUnit: "per kg",
-    imageUrl: "/oranges.jpg", // Updated image path
+    imageUrl: "/oranges.jpg",
     minOrderQuantity: 1,
     availableQuantity: 45,
     vendorName: "Citrus Grove",
@@ -133,7 +122,7 @@ const dummyProducts: Product[] = [
     description: "Fresh bitter gourd, known for its health benefits and unique taste.",
     price: 70.00,
     quantityUnit: "per kg",
-    imageUrl: "/karela.jpg", // New image path
+    imageUrl: "/karela.jpg",
     minOrderQuantity: 0.5,
     availableQuantity: 35,
     vendorName: "Healthy Bites",
@@ -144,7 +133,7 @@ const dummyProducts: Product[] = [
     description: "Pungent and flavorful garlic, essential for many cuisines.",
     price: 120.00,
     quantityUnit: "per 250g",
-    imageUrl: "/garlic.jpg", // New image path
+    imageUrl: "/garlic.jpg",
     minOrderQuantity: 0.25,
     availableQuantity: 60,
     vendorName: "Spice Route",
