@@ -10,7 +10,9 @@ import VendorLoginPage from "./pages/VendorLoginPage";
 import ClientDashboard from "./pages/ClientDashboard";
 import VendorDashboard from "./pages/VendorDashboard";
 import AddProductPage from "./pages/AddProductPage";
-import EditProductPage from "./pages/EditProductPage"; // Import the new page
+import EditProductPage from "./pages/EditProductPage";
+import ClientOrdersPage from "./pages/ClientOrdersPage"; // New import
+import ClientFavoriteVendorsPage from "./pages/ClientFavoriteVendorsPage"; // New import
 
 const queryClient = new QueryClient();
 
@@ -27,7 +29,9 @@ const App = () => (
           <Route path="/client-dashboard" element={<ClientDashboard />} />
           <Route path="/vendor-dashboard" element={<VendorDashboard />} />
           <Route path="/vendor-add-product" element={<AddProductPage />} />
-          <Route path="/vendor-edit-product/:productId" element={<EditProductPage />} /> {/* New route */}
+          <Route path="/vendor-edit-product/:productId" element={<EditProductPage />} />
+          <Route path="/client-orders" element={<ClientOrdersPage />} /> {/* New route */}
+          <Route path="/client-favorite-vendors" element={<ClientFavoriteVendorsPage />} /> {/* New route */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -38,6 +38,10 @@ const ClientDashboard = () => {
     });
   };
 
+  const handleRemoveFromCart = (itemId: string) => {
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+  };
+
   const handleSearch = (query: string) => {
     if (!query) {
       setFilteredProducts(initialProducts);
@@ -63,7 +67,7 @@ const ClientDashboard = () => {
   };
 
   return (
-    <BuyerDashboardLayout cartItems={cartItems} onSearch={handleSearch}>
+    <BuyerDashboardLayout cartItems={cartItems} onSearch={handleSearch} onRemoveFromCart={handleRemoveFromCart}>
       <div className="w-full max-w-6xl mx-auto py-4">
         <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">Available Products</h1>
         <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 text-center">
