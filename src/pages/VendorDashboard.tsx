@@ -3,56 +3,77 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import VendorProducts from "@/components/VendorProducts"; // Import the new component
+import VendorProducts from "@/components/VendorProducts";
 
 const dummyProducts = [
   {
     id: "1",
     name: "Organic Apples",
     description: "Freshly picked organic apples, sweet and crisp. Perfect for snacking or baking.",
-    price: 120.00, // Adjusted price
+    price: 120.00,
     imageUrl: "/apple.jpg",
   },
   {
     id: "2",
     name: "Heirloom Tomatoes",
     description: "Vibrant and flavorful heirloom tomatoes, ideal for salads and gourmet dishes.",
-    price: 90.00, // Adjusted price
+    price: 90.00,
     imageUrl: "/tomato.jpg",
   },
   {
     id: "3",
     name: "Fresh Spinach",
     description: "Nutrient-rich fresh spinach, great for smoothies, salads, or sautéing.",
-    price: 60.00, // Adjusted price
+    price: 60.00,
     imageUrl: "/spinach.jpg",
   },
   {
     id: "4",
     name: "Sweet Potatoes",
     description: "Naturally sweet and versatile sweet potatoes, perfect for roasting or mashing.",
-    price: 90.00, // Adjusted price
+    price: 90.00,
     imageUrl: "/potato.jpg",
   },
   {
     id: "5",
     name: "Organic Bananas",
     description: "Ripe organic bananas, a healthy and convenient snack.",
-    price: 70.00, // Adjusted price
+    price: 70.00,
     imageUrl: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwYmFuYW5hc3xlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
   },
   {
-    id: "7", // ID changed from 6 to 7 after removing bell peppers
-    name: "Bitter Gourd (Karela)",
-    description: "Fresh bitter gourd, known for its health benefits and unique taste.",
-    price: 70.00, // Adjusted price
-    imageUrl: "/karela.jpg",
+    id: "7",
+    name: "Fresh Carrots",
+    description: "Sweet and crunchy carrots, perfect for juicing, salads, or cooking.",
+    price: 80.00,
+    imageUrl: "https://images.unsplash.com/photo-1529692236671-ac3369727154?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxjYXJyb3RzfGVufDB8fHx8MTcxOTk0NjY1OHww&ixlib=rb-4.0.3&q=80&w=1080",
   },
   {
     id: "8",
+    name: "Broccoli Florets",
+    description: "Healthy and fresh broccoli florets, ready to be steamed or stir-fried.",
+    price: 120.00,
+    imageUrl: "https://images.unsplash.com/photo-1587223962930-cb7f317f862c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxiaXJvY2NvbGl8ZW58MHx8fHwxNzE5OTQ2NjU4fDA&lib=rb-4.0.3&q=80&w=1080",
+  },
+  {
+    id: "9",
+    name: "Fresh Oranges",
+    description: "Juicy and sweet oranges, perfect for a healthy snack or fresh juice.",
+    price: 100.00,
+    imageUrl: "/oranges.jpg",
+  },
+  {
+    id: "10",
+    name: "Bitter Gourd (Karela)",
+    description: "Fresh bitter gourd, known for its health benefits and unique taste.",
+    price: 70.00,
+    imageUrl: "/karela.jpg",
+  },
+  {
+    id: "11",
     name: "Garlic",
     description: "Pungent and flavorful garlic, essential for many cuisines.",
-    price: 120.00, // Adjusted price
+    price: 120.00,
     imageUrl: "/garlic.jpg",
   },
 ];
