@@ -29,14 +29,14 @@ const dummyFavoriteVendors: Vendor[] = [
     name: "Sunny Fields",
     description: "Fresh, locally sourced produce with a focus on quality.",
     rating: 4.5,
-    imageUrl: "https://images.unsplash.com/photo-1517057011479-f0627776357c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxmYXJtJTIwZmllbGRzfGVufDB8fHx8MTcxOTk0NjY1N3ww&ixlib=rb-4.0.3&q=80&w=1080",
+    imageUrl: "https://images.unsplash.com/photo-1517057011479-f0627776357c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxmYXJtJTIwZmllbGRzfGVufDB8fHx8MTcxOTk0NjY2MHww&ixlib=rb-4.0.3&q=80&w=1080",
   },
   {
     id: "V003",
     name: "Organic Harvest",
     description: "Sustainable farming practices for healthy and delicious greens.",
     rating: 4.9,
-    imageUrl: "https://images.unsplash.com/photo-1518843875456-df49b7921538?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxoYXJ2ZXN0JTIwZmFybXxlbnwwfHx8fDE3MTk5NDY2NTd8MA&ixlib=rb-4.0.3&q=80&w=1080",
+    imageUrl: "https://images.unsplash.com/photo-1518843875456-df49b7921538?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxoYXJ2ZXN0JTIwZmFybXxlbnwwfHx8fDE3MTk5NDY2NjB8MA&ixlib=rb-4.0.3&q=80&w=1080",
   },
 ];
 
@@ -49,8 +49,32 @@ const ClientFavoriteVendorsPage = () => {
     // In a real app, you'd filter vendors based on the query
   };
 
+  // Dummy handlers and states for BuyerDashboardLayout props
+  const handleRemoveFromCart = (productId: string) => console.log("Remove from cart:", productId);
+  const setCategoryFilter = (category: string) => console.log("Set category filter:", category);
+  const setVendorRatingFilter = (rating: number) => console.log("Set vendor rating filter:", rating);
+  const setPriceRangeFilter = (range: [number, number]) => console.log("Set price range filter:", range);
+  const setDeliveryLocationFilter = (location: string) => console.log("Set delivery location filter:", location);
+  const setShowNearestVendors = (show: boolean) => console.log("Set show nearest vendors:", show);
+
   return (
-    <BuyerDashboardLayout cartItems={cartItems} onSearch={handleSearch}>
+    <BuyerDashboardLayout
+      cartItems={cartItems}
+      onSearch={handleSearch}
+      onRemoveFromCart={handleRemoveFromCart}
+      categoryFilter="All"
+      setCategoryFilter={setCategoryFilter}
+      vendorRatingFilter={0}
+      setVendorRatingFilter={setVendorRatingFilter}
+      priceRangeFilter={[0, 500]}
+      setPriceRangeFilter={setPriceRangeFilter}
+      deliveryLocationFilter=""
+      setDeliveryLocationFilter={setDeliveryLocationFilter}
+      availableCategories={["All"]}
+      userLocation={null}
+      showNearestVendors={false}
+      setShowNearestVendors={setShowNearestVendors}
+    >
       <div className="w-full max-w-6xl mx-auto py-4">
         <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">
           {t('favorite_vendors_title')}

@@ -23,7 +23,7 @@ const translations = {
     cart: "Cart",
     your_cart: "Your Cart ({{count}} items)",
     cart_empty: "Your cart is empty.",
-    total: "Total",
+    cart_total: "Total", // Renamed to avoid conflict with order table 'Total'
     proceed_to_checkout: "Proceed to Checkout",
     notifications: "Notifications",
     profile: "Profile",
@@ -36,7 +36,7 @@ const translations = {
     order_id: "Order ID",
     date: "Date",
     vendor: "Vendor",
-    total: "Total",
+    total: "Total", // This 'total' refers to the order table column
     status: "Status",
     details: "Details",
     back_to_dashboard: "Back to Dashboard",

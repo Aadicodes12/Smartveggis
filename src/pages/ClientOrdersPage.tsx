@@ -69,8 +69,32 @@ const ClientOrdersPage = () => {
     // In a real app, you'd filter orders based on the query
   };
 
+  // Dummy handlers and states for BuyerDashboardLayout props
+  const handleRemoveFromCart = (productId: string) => console.log("Remove from cart:", productId);
+  const setCategoryFilter = (category: string) => console.log("Set category filter:", category);
+  const setVendorRatingFilter = (rating: number) => console.log("Set vendor rating filter:", rating);
+  const setPriceRangeFilter = (range: [number, number]) => console.log("Set price range filter:", range);
+  const setDeliveryLocationFilter = (location: string) => console.log("Set delivery location filter:", location);
+  const setShowNearestVendors = (show: boolean) => console.log("Set show nearest vendors:", show);
+
   return (
-    <BuyerDashboardLayout cartItems={cartItems} onSearch={handleSearch}>
+    <BuyerDashboardLayout
+      cartItems={cartItems}
+      onSearch={handleSearch}
+      onRemoveFromCart={handleRemoveFromCart}
+      categoryFilter="All"
+      setCategoryFilter={setCategoryFilter}
+      vendorRatingFilter={0}
+      setVendorRatingFilter={setVendorRatingFilter}
+      priceRangeFilter={[0, 500]}
+      setPriceRangeFilter={setPriceRangeFilter}
+      deliveryLocationFilter=""
+      setDeliveryLocationFilter={setDeliveryLocationFilter}
+      availableCategories={["All"]}
+      userLocation={null}
+      showNearestVendors={false}
+      setShowNearestVendors={setShowNearestVendors}
+    >
       <div className="w-full max-w-6xl mx-auto py-4">
         <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">
           {t('my_orders_title')}
