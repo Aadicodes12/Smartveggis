@@ -24,6 +24,7 @@ interface Product {
   category: string; // Added category for filtering
   vendorRating: number; // Added vendorRating for filtering
   vendor_id?: string; // Added vendor_id
+  distance?: number; // Added for sorting by distance
 }
 
 interface CartItem {
@@ -34,6 +35,19 @@ interface CartItem {
   orderedQuantity: number;
 }
 
+// Haversine formula to calculate distance between two lat/lng points in kilometers
+const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+  const R = 6371; // Radius of Earth in kilometers
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // Distance in km
+};
+
 const ClientDashboard = () => {
   const { supabase } = useSupabase();
   const [products, setProducts] = useState<Product[]>([]);
@@ -43,6 +57,32 @@ const ClientDashboard = () => {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductPreviewOpen, setIsProductPreviewOpen] = useState(false);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [showNearestVendors, setShowNearestVendors] = useState(false); // New state for nearest vendors filter
+
+  // Fetch user's current location
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+          toast.success("Your location has been detected!");
+        },
+        (error) => {
+          console.error("Error getting user location:", error);
+          toast.error("Could not retrieve your location. Nearest vendor filter will not be active.");
+          setUserLocation(null); // Explicitly set to null if permission denied or error
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      );
+    } else {
+      toast.info("Geolocation is not supported by your browser. Nearest vendor filter will not be active.");
+      setUserLocation(null);
+    }
+  }, []);
 
   // Filter states
   const [categoryFilter, setCategoryFilter] = useState<string>("All");
@@ -115,8 +155,32 @@ const ClientDashboard = () => {
       // For now, it's a visual indicator on the map.
     }
 
+    // Nearest Vendors filter
+    if (showNearestVendors && userLocation) {
+      currentFilteredProducts = currentFilteredProducts
+        .map(product => {
+          if (product.latitude && product.longitude) {
+            const dist = calculateDistance(
+              userLocation.lat,
+              userLocation.lng,
+              product.latitude,
+              product.longitude
+            );
+            return { ...product, distance: dist };
+          }
+          return { ...product, distance: Infinity }; // Products without location go to the end
+        })
+        .sort((a, b) => (a.distance || Infinity) - (b.distance || Infinity));
+    } else {
+      // If not showing nearest, ensure distance is not used for sorting
+      currentFilteredProducts = currentFilteredProducts.map(product => {
+        const { distance, ...rest } = product; // Remove distance property
+        return rest;
+      });
+    }
+
     setFilteredProducts(currentFilteredProducts);
-  }, [products, categoryFilter, vendorRatingFilter, priceRangeFilter, deliveryLocationFilter]);
+  }, [products, categoryFilter, vendorRatingFilter, priceRangeFilter, deliveryLocationFilter, showNearestVendors, userLocation]);
 
   const handleAddToCart = (product: Product, quantity: number) => {
     setCartItems((prevItems) => {
@@ -159,6 +223,29 @@ const ClientDashboard = () => {
         (product) => product.price >= priceRangeFilter[0] && product.price <= priceRangeFilter[1]
       );
 
+      // Re-apply nearest vendors filter if active
+      if (showNearestVendors && userLocation) {
+        currentFilteredProducts = currentFilteredProducts
+          .map(product => {
+            if (product.latitude && product.longitude) {
+              const dist = calculateDistance(
+                userLocation.lat,
+                userLocation.lng,
+                product.latitude,
+                product.longitude
+              );
+              return { ...product, distance: dist };
+            }
+            return { ...product, distance: Infinity };
+          })
+          .sort((a, b) => (a.distance || Infinity) - (b.distance || Infinity));
+      } else {
+        currentFilteredProducts = currentFilteredProducts.map(product => {
+          const { distance, ...rest } = product;
+          return rest;
+        });
+      }
+
       setFilteredProducts(currentFilteredProducts);
       return;
     }
@@ -198,6 +285,9 @@ const ClientDashboard = () => {
         deliveryLocationFilter={deliveryLocationFilter}
         setDeliveryLocationFilter={setDeliveryLocationFilter}
         availableCategories={availableCategories}
+        userLocation={userLocation}
+        showNearestVendors={showNearestVendors}
+        setShowNearestVendors={setShowNearestVendors}
       >
         <div className="w-full max-w-6xl mx-auto py-4 text-center">
           <p className="text-lg text-gray-600 dark:text-gray-300">Loading products...</p>
@@ -221,6 +311,9 @@ const ClientDashboard = () => {
         deliveryLocationFilter={deliveryLocationFilter}
         setDeliveryLocationFilter={setDeliveryLocationFilter}
         availableCategories={availableCategories}
+        userLocation={userLocation}
+        showNearestVendors={showNearestVendors}
+        setShowNearestVendors={setShowNearestVendors}
       >
         <div className="w-full max-w-6xl mx-auto py-4 text-center">
           <p className="text-lg text-red-600 dark:text-red-400 mb-4">{error}</p>
@@ -244,6 +337,9 @@ const ClientDashboard = () => {
       deliveryLocationFilter={deliveryLocationFilter}
       setDeliveryLocationFilter={setDeliveryLocationFilter}
       availableCategories={availableCategories}
+      userLocation={userLocation}
+      showNearestVendors={showNearestVendors}
+      setShowNearestVendors={setShowNearestVendors}
     >
       <div className="w-full max-w-6xl mx-auto py-4">
         <h1 className="text-4xl font-bold mb-4 text-gray-800 dark:text-gray-100 text-center">Available Products</h1>

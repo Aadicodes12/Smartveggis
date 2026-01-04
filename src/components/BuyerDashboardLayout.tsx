@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, User, Bell, Home, Package, Heart, Search, Menu, Trash2, Star } from "lucide-react";
+import { ShoppingCart, User, Bell, Home, Package, Heart, Search, Menu, Trash2, Star, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch"; // Import Switch component
 
 interface CartItem {
   id: string;
@@ -38,7 +39,9 @@ interface BuyerDashboardLayoutProps {
   deliveryLocationFilter: string;
   setDeliveryLocationFilter: (location: string) => void;
   availableCategories: string[];
-  // userLocation: { lat: number; lng: number } | null; // Removed userLocation prop
+  userLocation: { lat: number; lng: number } | null; // Re-added userLocation prop
+  showNearestVendors: boolean; // New prop
+  setShowNearestVendors: (show: boolean) => void; // New prop
 }
 
 const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({
@@ -55,7 +58,9 @@ const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({
   deliveryLocationFilter,
   setDeliveryLocationFilter,
   availableCategories = [], 
-  // userLocation, // Removed userLocation from destructuring
+  userLocation, // Re-added userLocation from destructuring
+  showNearestVendors,
+  setShowNearestVendors,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const isMobile = useIsMobile();
@@ -153,19 +158,42 @@ const BuyerDashboardLayout: React.FC<BuyerDashboardLayoutProps> = ({
           />
         </div>
 
-        {/* Delivery Location Filter (Input for now, can be integrated with map later) */}
+        {/* Delivery Location Filter */}
         <div>
           <Label htmlFor="delivery-location-filter" className="font-medium text-gray-700 dark:text-gray-300">{t('delivery_location')}</Label>
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{t('delivery_location_filter_desc')}</p>
-          <Input
-            id="delivery-location-filter"
-            type="text"
-            placeholder="e.g., New Delhi"
-            value={deliveryLocationFilter} // Removed conditional rendering for userLocation
-            onChange={(e) => setDeliveryLocationFilter(e.target.value)}
-            className="w-full"
-          />
+          <div className="flex items-center gap-2">
+            <Input
+              id="delivery-location-filter"
+              type="text"
+              placeholder="e.g., New Delhi"
+              value={userLocation ? `${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}` : deliveryLocationFilter}
+              onChange={(e) => setDeliveryLocationFilter(e.target.value)}
+              className="w-full"
+              readOnly={!!userLocation} // Make read-only if userLocation is available
+            />
+            {userLocation && <MapPin className="h-5 w-5 text-green-600 dark:text-green-400" />}
+          </div>
+          {userLocation && (
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              {t('your_current_location')}
+            </p>
+          )}
         </div>
+
+        {/* Show Nearest Vendors Toggle */}
+        {userLocation && (
+          <div className="flex items-center justify-between mt-6">
+            <Label htmlFor="nearest-vendors-toggle" className="font-medium text-gray-700 dark:text-gray-300">
+              {t('show_nearest_vendors')}
+            </Label>
+            <Switch
+              id="nearest-vendors-toggle"
+              checked={showNearestVendors}
+              onCheckedChange={setShowNearestVendors}
+            />
+          </div>
+        )}
       </div>
     </nav>
   );

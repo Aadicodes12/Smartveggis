@@ -43,7 +43,8 @@ const translations = {
     favorite_vendors_title: "My Favorite Vendors",
     favorite_vendors_description: "Manage your preferred vendors for quick access to their products.",
     no_favorite_vendors: "You haven't added any favorite vendors yet.",
-    // Removed: your_current_location: "Your current location", 
+    your_current_location: "Your current location",
+    show_nearest_vendors: "Show Nearest Vendors",
   },
   // Add other languages here if needed
   // es: {
